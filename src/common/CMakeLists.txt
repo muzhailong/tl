@@ -1,0 +1,8 @@
+set(COMMON_OBJ common_obj)
+
+add_library(${COMMON_OBJ} OBJECT
+    ${CMAKE_CURRENT_SOURCE_DIR}/id.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utils.cpp
+)
+
+set_property(GLOBAL APPEND PROPERTY ${LIB_NAME}_COMMON_DEPS $<TARGET_OBJECTS:${COMMON_OBJ}>)

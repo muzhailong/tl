@@ -1,0 +1,13 @@
+set(SOURCE tokens.l)
+set(LEXER tokens)
+set(LEX_OBJ lex_obj)
+add_custom_command(
+    OUTPUT "${CMAKE_CURRENT_SOURCE_DIR}/${LEXER}.cpp"
+    COMMAND flex -o${CMAKE_CURRENT_SOURCE_DIR}/${LEXER}.cpp ${CMAKE_CURRENT_SOURCE_DIR}/${SOURCE}
+    DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/${LEXER}.l"
+)
+
+add_custom_target(mm ALL DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${LEXER}.cpp)
+add_library(${LEX_OBJ} "${CMAKE_CURRENT_SOURCE_DIR}/${LEXER}.cpp")
+
+set_property(GLOBAL APPEND PROPERTY ${LIB_NAME}_LEX_DEPS $<TARGET_OBJECTS:${LEX_OBJ}>)
