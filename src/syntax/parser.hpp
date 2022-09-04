@@ -94,7 +94,10 @@ extern int yydebug;
     V_SI64 = 282,                  /* V_SI64  */
     V_FP64 = 283,                  /* V_FP64  */
     V_STR = 284,                   /* V_STR  */
-    T_IDENTIFIER = 285             /* T_IDENTIFIER  */
+    T_IDENTIFIER = 285,            /* T_IDENTIFIER  */
+    KW_IF = 286,                   /* KW_IF  */
+    KW_ELSE = 287,                 /* KW_ELSE  */
+    KW_WHILE = 288                 /* KW_WHILE  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -116,8 +119,9 @@ union YYSTYPE
     common_impl::AssignStatement* assign_stmt;
     common_impl::SliceList* slice_list_node;
     common_impl::SliceExpression* slice_expr;
+    common_impl::IfElseStatement* if_else_stmt;
 
-#line 121 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.hpp"
+#line 125 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.hpp"
 
 };
 typedef union YYSTYPE YYSTYPE;

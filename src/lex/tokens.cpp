@@ -355,8 +355,8 @@ static void yynoreturn yy_fatal_error ( const char* msg  );
 	(yy_hold_char) = *yy_cp; \
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
-#define YY_NUM_RULES 27
-#define YY_END_OF_BUFFER 28
+#define YY_NUM_RULES 29
+#define YY_END_OF_BUFFER 30
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -364,12 +364,13 @@ struct yy_trans_info
 	flex_int32_t yy_verify;
 	flex_int32_t yy_nxt;
 	};
-static const flex_int16_t yy_accept[41] =
+static const flex_int16_t yy_accept[47] =
     {   0,
-        0,    0,   28,   26,    1,    1,   26,   26,   15,   16,
-       24,   22,   19,   23,   26,   25,   26,    4,   20,   21,
-        9,    6,   11,    2,   13,   14,   17,   18,    8,    0,
-        5,    3,    0,    0,    4,   10,    7,   12,    2,    0
+        0,    0,   30,   28,    1,    1,   28,   28,   17,   18,
+       26,   24,   21,   25,   28,   27,   28,    6,   22,   23,
+       11,    8,   13,    4,   15,   16,    4,    4,   19,   20,
+       10,    0,    7,    5,    0,    0,    6,   12,    9,   14,
+        4,    4,    2,    4,    3,    0
     } ;
 
 static const YY_CHAR yy_ec[256] =
@@ -385,9 +386,9 @@ static const YY_CHAR yy_ec[256] =
        21,   21,   21,   21,   21,   21,   21,   21,   21,   21,
        22,    1,   23,    1,   21,    1,   21,   21,   21,   21,
 
-       21,   21,   21,   21,   21,   21,   21,   21,   21,   21,
-       21,   21,   21,   21,   21,   21,   21,   21,   21,   21,
-       21,   21,   24,    1,   25,    1,    1,    1,    1,    1,
+       24,   25,   21,   21,   26,   21,   21,   27,   21,   21,
+       21,   21,   21,   21,   28,   21,   21,   21,   21,   21,
+       21,   21,   29,    1,   30,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
@@ -404,55 +405,59 @@ static const YY_CHAR yy_ec[256] =
         1,    1,    1,    1,    1
     } ;
 
-static const YY_CHAR yy_meta[26] =
+static const YY_CHAR yy_meta[31] =
     {   0,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1
+        1,    1,    1,    2,    2,    1,    1,    1,    1,    1,
+        2,    1,    1,    2,    2,    2,    2,    2,    1,    1
     } ;
 
-static const flex_int16_t yy_base[42] =
+static const flex_int16_t yy_base[49] =
     {   0,
-        0,    0,   56,   58,   58,   58,   36,   49,   58,   58,
-       58,   58,   58,   58,   12,   58,   16,   20,   58,   58,
-       34,   33,   28,   22,   58,   58,   58,   58,   58,   28,
-       58,   24,   26,   30,   34,   58,   58,   58,   36,   58,
-       28
+        0,    0,   62,   63,   63,   63,   42,   55,   63,   63,
+       63,   63,   63,   63,   17,   63,   21,   25,   63,   63,
+       40,   39,   38,    0,   63,   63,   29,   30,   63,   63,
+       63,   45,   63,   27,   29,   33,   37,   63,   63,   63,
+        0,   18,    0,   14,    0,   63,   52,   32
     } ;
 
-static const flex_int16_t yy_def[42] =
+static const flex_int16_t yy_def[49] =
     {   0,
-       40,    1,   40,   40,   40,   40,   40,   41,   40,   40,
-       40,   40,   40,   40,   40,   40,   40,   40,   40,   40,
-       40,   40,   40,   40,   40,   40,   40,   40,   40,   41,
-       40,   40,   40,   40,   40,   40,   40,   40,   40,    0,
-       40
+       46,    1,   46,   46,   46,   46,   46,   47,   46,   46,
+       46,   46,   46,   46,   46,   46,   46,   46,   46,   46,
+       46,   46,   46,   48,   46,   46,   48,   48,   46,   46,
+       46,   47,   46,   46,   46,   46,   46,   46,   46,   46,
+       48,   48,   48,   48,   48,    0,   46,   46
     } ;
 
-static const flex_int16_t yy_nxt[84] =
+static const flex_int16_t yy_nxt[94] =
     {   0,
         4,    5,    6,    7,    8,    9,   10,   11,   12,   13,
        14,   15,   16,   17,   18,   19,   20,   21,   22,   23,
-       24,   25,   26,   27,   28,   32,   32,   33,   30,   34,
-       34,   33,   31,   35,   35,   39,   39,   32,   32,   32,
-       32,   33,   39,   34,   34,   33,   38,   35,   35,   39,
-       39,   37,   36,   31,   29,   40,   39,    3,   40,   40,
-       40,   40,   40,   40,   40,   40,   40,   40,   40,   40,
-       40,   40,   40,   40,   40,   40,   40,   40,   40,   40,
-       40,   40,   40
+       24,   25,   26,   27,   24,   28,   24,   24,   29,   30,
+       34,   34,   35,   41,   36,   36,   35,   45,   37,   37,
+       34,   34,   34,   34,   35,   44,   36,   36,   35,   33,
+       37,   37,   32,   32,   43,   42,   40,   39,   38,   33,
+       31,   46,    3,   46,   46,   46,   46,   46,   46,   46,
+       46,   46,   46,   46,   46,   46,   46,   46,   46,   46,
+       46,   46,   46,   46,   46,   46,   46,   46,   46,   46,
+       46,   46,   46
+
     } ;
 
-static const flex_int16_t yy_chk[84] =
+static const flex_int16_t yy_chk[94] =
     {   0,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,   15,   15,   17,   41,   17,
-       17,   18,   30,   18,   18,   24,   24,   32,   32,   33,
-       33,   34,   24,   34,   34,   35,   23,   35,   35,   39,
-       39,   22,   21,    8,    7,    3,   39,   40,   40,   40,
-       40,   40,   40,   40,   40,   40,   40,   40,   40,   40,
-       40,   40,   40,   40,   40,   40,   40,   40,   40,   40,
-       40,   40,   40
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+       15,   15,   17,   48,   17,   17,   18,   44,   18,   18,
+       34,   34,   35,   35,   36,   42,   36,   36,   37,   32,
+       37,   37,   47,   47,   28,   27,   23,   22,   21,    8,
+        7,    3,   46,   46,   46,   46,   46,   46,   46,   46,
+       46,   46,   46,   46,   46,   46,   46,   46,   46,   46,
+       46,   46,   46,   46,   46,   46,   46,   46,   46,   46,
+       46,   46,   46
+
     } ;
 
 static yy_state_type yy_last_accepting_state;
@@ -480,8 +485,8 @@ char *yytext;
 #include "syntax/parser.hpp"
 
 using tl::common::TokenInfo;
-#line 484 "/home/muzhailong/Projects/workspace/tl/src/lex/tokens.cpp"
-#line 485 "/home/muzhailong/Projects/workspace/tl/src/lex/tokens.cpp"
+#line 489 "/home/muzhailong/Projects/workspace/tl/src/lex/tokens.cpp"
+#line 490 "/home/muzhailong/Projects/workspace/tl/src/lex/tokens.cpp"
 
 #define INITIAL 0
 
@@ -700,7 +705,7 @@ YY_DECL
 	{
 #line 14 "/home/muzhailong/Projects/workspace/tl/src/lex/tokens.l"
 
-#line 704 "/home/muzhailong/Projects/workspace/tl/src/lex/tokens.cpp"
+#line 709 "/home/muzhailong/Projects/workspace/tl/src/lex/tokens.cpp"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -727,13 +732,13 @@ yy_match:
 			while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 				{
 				yy_current_state = (int) yy_def[yy_current_state];
-				if ( yy_current_state >= 41 )
+				if ( yy_current_state >= 47 )
 					yy_c = yy_meta[yy_c];
 				}
 			yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
 			++yy_cp;
 			}
-		while ( yy_base[yy_current_state] != 58 );
+		while ( yy_base[yy_current_state] != 63 );
 
 yy_find_action:
 		yy_act = yy_accept[yy_current_state];
@@ -767,116 +772,116 @@ case 2:
 YY_RULE_SETUP
 #line 16 "/home/muzhailong/Projects/workspace/tl/src/lex/tokens.l"
 {
-                                yylval.token_info = new TokenInfo(T_IDENTIFIER,std::string(yytext,yyleng));
-                                return T_IDENTIFIER;
+                                yylval.token_info = new TokenInfo(KW_IF,std::string(yytext,yyleng));
+                                return KW_IF;
                             }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
 #line 21 "/home/muzhailong/Projects/workspace/tl/src/lex/tokens.l"
 {
+                                yylval.token_info = new TokenInfo(KW_ELSE,std::string(yytext,yyleng));
+                                return KW_ELSE;
+                            }
+	YY_BREAK
+case 4:
+YY_RULE_SETUP
+#line 26 "/home/muzhailong/Projects/workspace/tl/src/lex/tokens.l"
+{
+                                yylval.token_info = new TokenInfo(T_IDENTIFIER,std::string(yytext,yyleng));
+                                return T_IDENTIFIER;
+                            }
+	YY_BREAK
+case 5:
+YY_RULE_SETUP
+#line 31 "/home/muzhailong/Projects/workspace/tl/src/lex/tokens.l"
+{
                                 yylval.token_info = new TokenInfo(V_FP64);
                                 yylval.token_info->SetValue<double>(std::stod(std::string(yytext,yyleng)));
                                 return V_FP64;
                             }
 	YY_BREAK
-case 4:
+case 6:
 YY_RULE_SETUP
-#line 27 "/home/muzhailong/Projects/workspace/tl/src/lex/tokens.l"
+#line 37 "/home/muzhailong/Projects/workspace/tl/src/lex/tokens.l"
 {
                                 yylval.token_info = new TokenInfo(V_SI64);
                                 yylval.token_info->SetValue<int64_t>(std::stol(std::string(yytext,yyleng)));
                                 return V_SI64;
                             }
 	YY_BREAK
-case 5:
-/* rule 5 can match eol */
+case 7:
+/* rule 7 can match eol */
 YY_RULE_SETUP
-#line 33 "/home/muzhailong/Projects/workspace/tl/src/lex/tokens.l"
+#line 43 "/home/muzhailong/Projects/workspace/tl/src/lex/tokens.l"
 {
                                 yylval.token_info = new TokenInfo(V_STR);
                                 yylval.token_info->SetValue<std::string>(std::string(yytext+1,yyleng-2));
                                 return V_STR;
                             }
 	YY_BREAK
-case 6:
-YY_RULE_SETUP
-#line 39 "/home/muzhailong/Projects/workspace/tl/src/lex/tokens.l"
-{
-                                yylval.token_info = new TokenInfo(SY_EQUAL);
-                                return SY_EQUAL;
-                            }
-	YY_BREAK
-case 7:
-YY_RULE_SETUP
-#line 44 "/home/muzhailong/Projects/workspace/tl/src/lex/tokens.l"
-{
-                                yylval.token_info = new TokenInfo(SY_CEQ);
-                                return SY_CEQ;
-                            }
-	YY_BREAK
 case 8:
 YY_RULE_SETUP
 #line 49 "/home/muzhailong/Projects/workspace/tl/src/lex/tokens.l"
 {
-                                yylval.token_info = new TokenInfo(SY_CNE);
-                                return SY_CNE;
+                                yylval.token_info = new TokenInfo(SY_EQUAL);
+                                return SY_EQUAL;
                             }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
 #line 54 "/home/muzhailong/Projects/workspace/tl/src/lex/tokens.l"
 {
-                                yylval.token_info = new TokenInfo(SY_CLT);
-                                return SY_CLT;
+                                yylval.token_info = new TokenInfo(SY_CEQ);
+                                return SY_CEQ;
                             }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
 #line 59 "/home/muzhailong/Projects/workspace/tl/src/lex/tokens.l"
 {
-                                yylval.token_info = new TokenInfo(SY_CLE);
-                                return SY_CLE;
+                                yylval.token_info = new TokenInfo(SY_CNE);
+                                return SY_CNE;
                             }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
 #line 64 "/home/muzhailong/Projects/workspace/tl/src/lex/tokens.l"
 {
-                                yylval.token_info = new TokenInfo(SY_CGT);
-                                return SY_CGT;
+                                yylval.token_info = new TokenInfo(SY_CLT);
+                                return SY_CLT;
                             }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
 #line 69 "/home/muzhailong/Projects/workspace/tl/src/lex/tokens.l"
 {
-                                yylval.token_info = new TokenInfo(SY_CGE);
-                                return SY_CGE;
+                                yylval.token_info = new TokenInfo(SY_CLE);
+                                return SY_CLE;
                             }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
 #line 74 "/home/muzhailong/Projects/workspace/tl/src/lex/tokens.l"
 {
-                                yylval.token_info = new TokenInfo(SY_LEFT_BRACKET);
-                                return SY_LEFT_BRACKET;
+                                yylval.token_info = new TokenInfo(SY_CGT);
+                                return SY_CGT;
                             }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
 #line 79 "/home/muzhailong/Projects/workspace/tl/src/lex/tokens.l"
 {
-                                yylval.token_info = new TokenInfo(SY_RIGHT_BRACKET);
-                                return SY_RIGHT_BRACKET;
+                                yylval.token_info = new TokenInfo(SY_CGE);
+                                return SY_CGE;
                             }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
 #line 84 "/home/muzhailong/Projects/workspace/tl/src/lex/tokens.l"
 {
-                                yylval.token_info = new TokenInfo(SY_RIGHT_BRACKET);
-                                return SY_LEFT_PAREN;
+                                yylval.token_info = new TokenInfo(SY_LEFT_BRACKET);
+                                return SY_LEFT_BRACKET;
                             }
 	YY_BREAK
 case 16:
@@ -884,96 +889,112 @@ YY_RULE_SETUP
 #line 89 "/home/muzhailong/Projects/workspace/tl/src/lex/tokens.l"
 {
                                 yylval.token_info = new TokenInfo(SY_RIGHT_BRACKET);
-                                return SY_RIGHT_PAREN;
+                                return SY_RIGHT_BRACKET;
                             }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
 #line 94 "/home/muzhailong/Projects/workspace/tl/src/lex/tokens.l"
 {
-                                yylval.token_info = new TokenInfo(SY_LEFT_BRACE);
-                                return SY_LEFT_BRACE;
+                                yylval.token_info = new TokenInfo(SY_RIGHT_BRACKET);
+                                return SY_LEFT_PAREN;
                             }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
 #line 99 "/home/muzhailong/Projects/workspace/tl/src/lex/tokens.l"
 {
-                                yylval.token_info = new TokenInfo(SY_RIGHT_BRACE);
-                                return SY_RIGHT_BRACE;
+                                yylval.token_info = new TokenInfo(SY_RIGHT_BRACKET);
+                                return SY_RIGHT_PAREN;
                             }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
 #line 104 "/home/muzhailong/Projects/workspace/tl/src/lex/tokens.l"
 {
-                                yylval.token_info = new TokenInfo(SY_COMMA);
-                                return SY_COMMA;
+                                yylval.token_info = new TokenInfo(SY_LEFT_BRACE);
+                                return SY_LEFT_BRACE;
                             }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
 #line 109 "/home/muzhailong/Projects/workspace/tl/src/lex/tokens.l"
 {
-                                yylval.token_info = new TokenInfo(SY_COLON);
-                                return SY_COLON;
+                                yylval.token_info = new TokenInfo(SY_RIGHT_BRACE);
+                                return SY_RIGHT_BRACE;
                             }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
 #line 114 "/home/muzhailong/Projects/workspace/tl/src/lex/tokens.l"
 {
-                                yylval.token_info = new TokenInfo(SY_SEMICOLON);
-                                return SY_SEMICOLON;
+                                yylval.token_info = new TokenInfo(SY_COMMA);
+                                return SY_COMMA;
                             }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
 #line 119 "/home/muzhailong/Projects/workspace/tl/src/lex/tokens.l"
 {
-                                yylval.token_info = new TokenInfo(SY_PLUS);
-                                return SY_PLUS;
+                                yylval.token_info = new TokenInfo(SY_COLON);
+                                return SY_COLON;
                             }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
 #line 124 "/home/muzhailong/Projects/workspace/tl/src/lex/tokens.l"
 {
-                                yylval.token_info = new TokenInfo(SY_MINUS);
-                                return SY_MINUS;
+                                yylval.token_info = new TokenInfo(SY_SEMICOLON);
+                                return SY_SEMICOLON;
                             }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 128 "/home/muzhailong/Projects/workspace/tl/src/lex/tokens.l"
+#line 129 "/home/muzhailong/Projects/workspace/tl/src/lex/tokens.l"
+{
+                                yylval.token_info = new TokenInfo(SY_PLUS);
+                                return SY_PLUS;
+                            }
+	YY_BREAK
+case 25:
+YY_RULE_SETUP
+#line 134 "/home/muzhailong/Projects/workspace/tl/src/lex/tokens.l"
+{
+                                yylval.token_info = new TokenInfo(SY_MINUS);
+                                return SY_MINUS;
+                            }
+	YY_BREAK
+case 26:
+YY_RULE_SETUP
+#line 138 "/home/muzhailong/Projects/workspace/tl/src/lex/tokens.l"
 {
                                 yylval.token_info = new TokenInfo(SY_MUL);
                                 return SY_MUL;
                             }
 	YY_BREAK
-case 25:
+case 27:
 YY_RULE_SETUP
-#line 132 "/home/muzhailong/Projects/workspace/tl/src/lex/tokens.l"
+#line 142 "/home/muzhailong/Projects/workspace/tl/src/lex/tokens.l"
 {
                                 yylval.token_info = new TokenInfo(SY_DIV);
                                 return SY_DIV;
                             }
 	YY_BREAK
-case 26:
+case 28:
 YY_RULE_SETUP
-#line 136 "/home/muzhailong/Projects/workspace/tl/src/lex/tokens.l"
+#line 146 "/home/muzhailong/Projects/workspace/tl/src/lex/tokens.l"
 {
                                 std::cout<<std::string(yytext,yyleng)<<std::endl;
                                 printf("Unknown token!\n"); 
                                 yyterminate();
                             }
 	YY_BREAK
-case 27:
+case 29:
 YY_RULE_SETUP
-#line 141 "/home/muzhailong/Projects/workspace/tl/src/lex/tokens.l"
+#line 151 "/home/muzhailong/Projects/workspace/tl/src/lex/tokens.l"
 ECHO;
 	YY_BREAK
-#line 977 "/home/muzhailong/Projects/workspace/tl/src/lex/tokens.cpp"
+#line 998 "/home/muzhailong/Projects/workspace/tl/src/lex/tokens.cpp"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1270,7 +1291,7 @@ static int yy_get_next_buffer (void)
 		while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 			{
 			yy_current_state = (int) yy_def[yy_current_state];
-			if ( yy_current_state >= 41 )
+			if ( yy_current_state >= 47 )
 				yy_c = yy_meta[yy_c];
 			}
 		yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
@@ -1298,11 +1319,11 @@ static int yy_get_next_buffer (void)
 	while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 		{
 		yy_current_state = (int) yy_def[yy_current_state];
-		if ( yy_current_state >= 41 )
+		if ( yy_current_state >= 47 )
 			yy_c = yy_meta[yy_c];
 		}
 	yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
-	yy_is_jam = (yy_current_state == 40);
+	yy_is_jam = (yy_current_state == 46);
 
 		return yy_is_jam ? 0 : yy_current_state;
 }
@@ -1978,5 +1999,5 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 141 "/home/muzhailong/Projects/workspace/tl/src/lex/tokens.l"
+#line 151 "/home/muzhailong/Projects/workspace/tl/src/lex/tokens.l"
 

@@ -28,6 +28,7 @@
     common_impl::AssignStatement* assign_stmt;
     common_impl::SliceList* slice_list_node;
     common_impl::SliceExpression* slice_expr;
+    common_impl::IfElseStatement* if_else_stmt;
 }
 
 
@@ -74,6 +75,12 @@
 
 %token <token_info> T_IDENTIFIER
 
+/*
+    switch: SY_SWITCH
+
+*/
+%token <token_info> KW_IF KW_ELSE KW_WHILE
+
 /* Define the type of node our nonterminal symbols represent.
    The types refer to the %union declaration above. Ex: when
    we call an ident (defined by union type ident) we are really
@@ -90,7 +97,9 @@
 %type <assign_stmt> assign_stmt
 %type <slice_list_node> slice_lt
 %type <slice_expr> slice_expr
+%type <if_else_stmt> if_else_stmt if_sub_stmt
 
+%left KW_ELSE
 %left SY_COMMA
 %left SY_CEQ SY_CNE SY_CGT SY_CLT SY_CGE SY_CLE
 %left SY_PLUS SY_MINUS
@@ -99,7 +108,7 @@
 /* Operator precedence for mathematical operators */
 
 %start program
-%%
+%% 
 program : block { programBlock.reset($1); }
          ;
                 
@@ -112,6 +121,7 @@ block : stmt {
 
 stmt :var_decl {$$=$1;}
     | assign_stmt{$$=$1;}
+    | if_else_stmt {$$=$1;}
     ;
 
 var_decl : T_IDENTIFIER shape_lt T_IDENTIFIER lt_init SY_SEMICOLON
@@ -136,6 +146,27 @@ var_decl : T_IDENTIFIER shape_lt T_IDENTIFIER lt_init SY_SEMICOLON
 assign_stmt : T_IDENTIFIER SY_EQUAL value_expr SY_SEMICOLON
             {
                 $$ = new common_impl::AssignStatement($1->GetIdent(),$3);
+            }
+            ;
+
+if_else_stmt : if_sub_stmt{ $$=$1;}
+            | if_sub_stmt KW_ELSE SY_LEFT_BRACE block SY_RIGHT_BRACE
+            {
+                $$ = $1;
+                $1->AppendIfElse(nullptr,$4);
+            }
+            ;
+
+if_sub_stmt : KW_IF SY_LEFT_PAREN value_expr SY_RIGHT_PAREN SY_LEFT_BRACE block SY_RIGHT_BRACE
+            {
+                $$ = new common_impl::IfElseStatement();
+                $$->AppendIfElse($3,$6);
+            }
+            | if_sub_stmt KW_ELSE if_sub_stmt
+            {
+                $$ = new common_impl::IfElseStatement();
+                $$ -> AppendIfElse($1);
+                $$ -> AppendIfElse($3);
             }
             ;
 
@@ -172,6 +203,12 @@ slice_lt : V_SI64
             {
                 $$=new common_impl::SliceList();
                 $$->AppendIndex(common_impl::SliceList::Position::TO_BEGIN,$1->GetValue<int64_t>());
+            }
+            | SY_COLON
+            {
+                $$=new common_impl::SliceList();
+                $$->AppendIndex(common_impl::SliceList::Position::TO_BEGIN,
+                                    common_impl::SliceList::Position::TO_END);
             }
             | V_SI64 SY_COLON V_SI64 
             {

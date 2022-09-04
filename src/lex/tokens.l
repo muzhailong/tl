@@ -13,6 +13,16 @@ using tl::common::TokenInfo;
 %option noyywrap
 %%
 [ \t\n]                      ;
+"if"                        {
+                                yylval.token_info = new TokenInfo(KW_IF,std::string(yytext,yyleng));
+                                return KW_IF;
+                            }
+
+"else"                      {
+                                yylval.token_info = new TokenInfo(KW_ELSE,std::string(yytext,yyleng));
+                                return KW_ELSE;
+                            }
+
 [a-zA-Z_][a-zA-Z0-9_]*      {
                                 yylval.token_info = new TokenInfo(T_IDENTIFIER,std::string(yytext,yyleng));
                                 return T_IDENTIFIER;
@@ -105,7 +115,7 @@ using tl::common::TokenInfo;
                                 yylval.token_info = new TokenInfo(SY_COMMA);
                                 return SY_COMMA;
                             }
-                            
+
 ":"                         {
                                 yylval.token_info = new TokenInfo(SY_COLON);
                                 return SY_COLON;

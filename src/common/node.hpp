@@ -398,6 +398,65 @@ private:
     std::shared_ptr<SliceList> slice_lt_;
 };
 
+class IfElseStatement : public Node {
+public:
+    IfElseStatement(const std::string& name) : Node(name) {}
+    IfElseStatement() : IfElseStatement("if_else_stmt") {}
+
+    std::shared_ptr<llvm::Value> CodeGen(CodeGenContext&) override {
+        return nullptr;
+    }
+
+    void Print(DotHelper& helper) const override {
+        helper.WriteNode(GetId(), GetName());
+        for (size_t i = 0; i < if_else_stmts_.size(); ++i) {
+            auto& item = if_else_stmts_[i];
+            if (item.first) {
+                item.first->Print(helper);
+                std::string label = "if_stmt_";
+                label += std::to_string(i);
+                helper.WriteEdge(GetId(), item.first->GetId(), label);
+            }
+
+            if (item.second) {
+                item.second->Print(helper);
+                std::string label = "if_block_";
+                label += std::to_string(i);
+                helper.WriteEdge(GetId(), item.second->GetId(), label);
+            }
+        }
+    }
+
+    Status AppendIfElse(std::shared_ptr<ExpressionNode> en,
+                        std::shared_ptr<Block> block) {
+        if_else_stmts_.emplace_back(en, block);
+        return Status::TL_OK;
+    }
+
+    Status AppendIfElse(ExpressionNode* en, Block* block) {
+        return AppendIfElse(std::shared_ptr<ExpressionNode>(en),
+                            std::shared_ptr<Block>(block));
+    }
+
+    Status AppendIfElse(const std::shared_ptr<IfElseStatement>& other) {
+        if (other) {
+            if_else_stmts_.insert(if_else_stmts_.end(),
+                                  other->if_else_stmts_.begin(),
+                                  other->if_else_stmts_.end());
+        }
+        return Status::TL_OK;
+    }
+
+    Status AppendIfElse(IfElseStatement* other) {
+        return AppendIfElse(std::shared_ptr<IfElseStatement>(other));
+    }
+
+private:
+    std::vector<
+        std::pair<std::shared_ptr<ExpressionNode>, std::shared_ptr<Block>>>
+        if_else_stmts_;
+};
+
 }  // namespace common
 }  // namespace tl
 
