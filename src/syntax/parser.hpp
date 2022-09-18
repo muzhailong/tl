@@ -53,10 +53,11 @@ extern int yydebug;
 
     #include "common/node.hpp"
     #include "common/token.hpp"
+    #include "common/location.hpp"
 
     namespace common_impl = tl::common;
 
-#line 60 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.hpp"
+#line 61 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.hpp"
 
 /* Token kinds.  */
 #ifndef YYTOKENTYPE
@@ -97,7 +98,9 @@ extern int yydebug;
     T_IDENTIFIER = 285,            /* T_IDENTIFIER  */
     KW_IF = 286,                   /* KW_IF  */
     KW_ELSE = 287,                 /* KW_ELSE  */
-    KW_WHILE = 288                 /* KW_WHILE  */
+    KW_WHILE = 288,                /* KW_WHILE  */
+    KW_RETURN = 289,               /* KW_RETURN  */
+    KW_BREAK = 290                 /* KW_BREAK  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -106,9 +109,10 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 19 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+#line 20 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
 
     common_impl::Node* node;
+    common_impl::ModuleNode* module;
     common_impl::Block* block;
     common_impl::SI64ListNode* si64_list_node;
     common_impl::FP64ListNode* fp64_list_node;
@@ -120,8 +124,15 @@ union YYSTYPE
     common_impl::SliceList* slice_list_node;
     common_impl::SliceExpression* slice_expr;
     common_impl::IfElseStatement* if_else_stmt;
+    common_impl::WhileStatement* while_stmt;
+    common_impl::ArgumentList* arg_list;
+    common_impl::FunctionDeclaration* func_decl;
+    common_impl::ReturnStatement* return_stmt;
+    common_impl::ExpressionList* expr_list;
+    common_impl::FunctionCall* func_call;
+    common_impl::BreakStatement* break_stmt;
 
-#line 125 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.hpp"
+#line 136 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.hpp"
 
 };
 typedef union YYSTYPE YYSTYPE;

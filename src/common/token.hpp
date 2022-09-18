@@ -5,6 +5,7 @@
 #include <iostream>
 #include <variant>
 
+#include "common/location.hpp"
 #include "common/utils.hpp"
 
 namespace tl {
@@ -17,6 +18,14 @@ public:
     TokenInfo(TokenIdType token, const std::string& ident)
         : tokenId_(token), ident_(ident) {}
     TokenInfo(TokenIdType token) : tokenId_(token), ident_(GenerateName()) {}
+
+    void SetLocation(const std::string& filename,
+                     Location::LocationElementType r1,
+                     Location::LocationElementType r2,
+                     Location::LocationElementType c1,
+                     Location::LocationElementType c2) {
+        loc_ = {filename, r1, r2, c1, c2};
+    }
 
     template <typename Tp>
     void SetValue(Tp value) {
@@ -31,6 +40,7 @@ public:
     std::string GetIdent() const { return ident_; }
 
     TokenIdType GetTokenId() const { return tokenId_; }
+    Location GetLocation() const { return loc_; }
 
 private:
     TokenIdType tokenId_;
@@ -41,6 +51,8 @@ private:
         value_;
 
     const std::string ident_;
+
+    Location loc_;
 };
 
 

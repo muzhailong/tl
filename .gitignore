@@ -1,2 +1,4 @@
 /build
 /.vscode
+/**/**.inc
+/**/**.inc.d

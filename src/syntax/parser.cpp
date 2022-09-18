@@ -127,40 +127,51 @@ enum yysymbol_kind_t
   YYSYMBOL_KW_IF = 31,                     /* KW_IF  */
   YYSYMBOL_KW_ELSE = 32,                   /* KW_ELSE  */
   YYSYMBOL_KW_WHILE = 33,                  /* KW_WHILE  */
-  YYSYMBOL_YYACCEPT = 34,                  /* $accept  */
-  YYSYMBOL_program = 35,                   /* program  */
-  YYSYMBOL_block = 36,                     /* block  */
-  YYSYMBOL_stmt = 37,                      /* stmt  */
-  YYSYMBOL_var_decl = 38,                  /* var_decl  */
-  YYSYMBOL_assign_stmt = 39,               /* assign_stmt  */
-  YYSYMBOL_if_else_stmt = 40,              /* if_else_stmt  */
-  YYSYMBOL_if_sub_stmt = 41,               /* if_sub_stmt  */
-  YYSYMBOL_value_expr = 42,                /* value_expr  */
-  YYSYMBOL_slice_expr = 43,                /* slice_expr  */
-  YYSYMBOL_slice_lt = 44,                  /* slice_lt  */
-  YYSYMBOL_lt_init = 45,                   /* lt_init  */
-  YYSYMBOL_str_lt_init = 46,               /* str_lt_init  */
-  YYSYMBOL_fp64_lt_init = 47,              /* fp64_lt_init  */
-  YYSYMBOL_si64_lt_init = 48,              /* si64_lt_init  */
-  YYSYMBOL_shape_lt = 49,                  /* shape_lt  */
-  YYSYMBOL_si64_lt = 50,                   /* si64_lt  */
-  YYSYMBOL_fp64_lt = 51,                   /* fp64_lt  */
-  YYSYMBOL_str_lt = 52,                    /* str_lt  */
-  YYSYMBOL_single_val = 53,                /* single_val  */
-  YYSYMBOL_literal_val = 54                /* literal_val  */
+  YYSYMBOL_KW_RETURN = 34,                 /* KW_RETURN  */
+  YYSYMBOL_KW_BREAK = 35,                  /* KW_BREAK  */
+  YYSYMBOL_YYACCEPT = 36,                  /* $accept  */
+  YYSYMBOL_program = 37,                   /* program  */
+  YYSYMBOL_module = 38,                    /* module  */
+  YYSYMBOL_block = 39,                     /* block  */
+  YYSYMBOL_stmt = 40,                      /* stmt  */
+  YYSYMBOL_var_decl = 41,                  /* var_decl  */
+  YYSYMBOL_assign_stmt = 42,               /* assign_stmt  */
+  YYSYMBOL_if_else_stmt = 43,              /* if_else_stmt  */
+  YYSYMBOL_while_stmt = 44,                /* while_stmt  */
+  YYSYMBOL_func_decl = 45,                 /* func_decl  */
+  YYSYMBOL_return_stmt = 46,               /* return_stmt  */
+  YYSYMBOL_break_stmt = 47,                /* break_stmt  */
+  YYSYMBOL_formal_args_lt_with_empty = 48, /* formal_args_lt_with_empty  */
+  YYSYMBOL_if_sub_stmt = 49,               /* if_sub_stmt  */
+  YYSYMBOL_func_call = 50,                 /* func_call  */
+  YYSYMBOL_actual_args_lt_with_empty = 51, /* actual_args_lt_with_empty  */
+  YYSYMBOL_value_expr_with_empty = 52,     /* value_expr_with_empty  */
+  YYSYMBOL_value_expr = 53,                /* value_expr  */
+  YYSYMBOL_slice_expr = 54,                /* slice_expr  */
+  YYSYMBOL_slice_lt = 55,                  /* slice_lt  */
+  YYSYMBOL_lt_init_with_empty = 56,        /* lt_init_with_empty  */
+  YYSYMBOL_str_lt_init = 57,               /* str_lt_init  */
+  YYSYMBOL_fp64_lt_init = 58,              /* fp64_lt_init  */
+  YYSYMBOL_si64_lt_init = 59,              /* si64_lt_init  */
+  YYSYMBOL_shape_lt_with_empty = 60,       /* shape_lt_with_empty  */
+  YYSYMBOL_si64_lt = 61,                   /* si64_lt  */
+  YYSYMBOL_fp64_lt = 62,                   /* fp64_lt  */
+  YYSYMBOL_str_lt = 63,                    /* str_lt  */
+  YYSYMBOL_single_val = 64,                /* single_val  */
+  YYSYMBOL_literal_val = 65                /* literal_val  */
 };
 typedef enum yysymbol_kind_t yysymbol_kind_t;
 
 
 
 /* Unqualified %code blocks.  */
-#line 12 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+#line 13 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
        
-    std::shared_ptr<common_impl::Node>programBlock; /* the top level root node of our final AST */
+    std::shared_ptr<common_impl::ModuleNode>program; /* the top level root node of our final AST */
     extern int yylex();
     void yyerror(const char *s) { std::printf("Error: %s\n", s);std::exit(1); }
 
-#line 164 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+#line 175 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
 
 #ifdef short
 # undef short
@@ -272,7 +283,7 @@ typedef int yytype_uint16;
 
 
 /* Stored state numbers (used for stacks). */
-typedef yytype_int8 yy_state_t;
+typedef yytype_uint8 yy_state_t;
 
 /* State numbers in computations.  */
 typedef int yy_state_fast_t;
@@ -481,21 +492,21 @@ union yyalloc
 #endif /* !YYCOPY_NEEDED */
 
 /* YYFINAL -- State number of the termination state.  */
-#define YYFINAL  14
+#define YYFINAL  7
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   107
+#define YYLAST   175
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  34
+#define YYNTOKENS  36
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  21
+#define YYNNTS  30
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  53
+#define YYNRULES  72
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  92
+#define YYNSTATES  133
 
 /* YYMAXUTOK -- Last valid token kind.  */
-#define YYMAXUTOK   288
+#define YYMAXUTOK   290
 
 
 /* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
@@ -537,19 +548,22 @@ static const yytype_int8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
        5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
       15,    16,    17,    18,    19,    20,    21,    22,    23,    24,
-      25,    26,    27,    28,    29,    30,    31,    32,    33
+      25,    26,    27,    28,    29,    30,    31,    32,    33,    34,
+      35
 };
 
 #if YYDEBUG
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int16 yyrline[] =
 {
-       0,   112,   112,   115,   119,   122,   123,   124,   127,   136,
-     146,   152,   153,   160,   165,   173,   174,   175,   176,   177,
-     178,   179,   180,   181,   182,   183,   186,   192,   197,   202,
-     207,   213,   218,   228,   229,   230,   231,   234,   237,   240,
-     243,   244,   247,   251,   257,   261,   267,   271,   278,   279,
-     280,   283,   284,   285
+       0,   129,   129,   131,   137,   144,   148,   151,   152,   153,
+     154,   155,   156,   159,   173,   189,   202,   203,   216,   229,
+     244,   256,   264,   265,   280,   294,   304,   311,   324,   325,
+     333,   344,   345,   348,   359,   371,   383,   395,   407,   419,
+     431,   443,   455,   467,   481,   495,   503,   514,   525,   537,
+     549,   560,   561,   562,   563,   567,   575,   583,   591,   592,
+     600,   607,   617,   624,   634,   641,   652,   653,   661,   662,
+     666,   674,   682
 };
 #endif
 
@@ -571,10 +585,14 @@ static const char *const yytname[] =
   "SY_LEFT_BRACKET", "SY_RIGHT_BRACKET", "SY_COMMA", "SY_COLON",
   "SY_LEFT_BRACE", "SY_RIGHT_BRACE", "SY_SEMICOLON", "SY_LEFT_PAREN",
   "SY_RIGHT_PAREN", "V_SI64", "V_FP64", "V_STR", "T_IDENTIFIER", "KW_IF",
-  "KW_ELSE", "KW_WHILE", "$accept", "program", "block", "stmt", "var_decl",
-  "assign_stmt", "if_else_stmt", "if_sub_stmt", "value_expr", "slice_expr",
-  "slice_lt", "lt_init", "str_lt_init", "fp64_lt_init", "si64_lt_init",
-  "shape_lt", "si64_lt", "fp64_lt", "str_lt", "single_val", "literal_val", YY_NULLPTR
+  "KW_ELSE", "KW_WHILE", "KW_RETURN", "KW_BREAK", "$accept", "program",
+  "module", "block", "stmt", "var_decl", "assign_stmt", "if_else_stmt",
+  "while_stmt", "func_decl", "return_stmt", "break_stmt",
+  "formal_args_lt_with_empty", "if_sub_stmt", "func_call",
+  "actual_args_lt_with_empty", "value_expr_with_empty", "value_expr",
+  "slice_expr", "slice_lt", "lt_init_with_empty", "str_lt_init",
+  "fp64_lt_init", "si64_lt_init", "shape_lt_with_empty", "si64_lt",
+  "fp64_lt", "str_lt", "single_val", "literal_val", YY_NULLPTR
 };
 
 static const char *
@@ -584,7 +602,7 @@ yysymbol_name (yysymbol_kind_t yysymbol)
 }
 #endif
 
-#define YYPACT_NINF (-29)
+#define YYPACT_NINF (-74)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
@@ -596,18 +614,22 @@ yysymbol_name (yysymbol_kind_t yysymbol)
 
 /* YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
    STATE-NUM.  */
-static const yytype_int8 yypact[] =
+static const yytype_int16 yypact[] =
 {
-       8,    -6,    22,     7,     8,   -29,   -29,   -29,   -29,   -21,
-      32,    54,    62,    32,   -29,   -29,   -18,   -29,   -29,   -29,
-      75,    52,   -29,   -29,   -29,   -29,     0,    -8,    37,     8,
-     -29,    10,    32,    32,    32,    32,    32,    32,    32,    32,
-      32,    32,   -29,   -29,    68,    32,    56,    70,   -29,   -29,
-     -29,    77,   -15,    73,    76,    25,    69,    69,   -29,   -29,
-      67,    67,    67,    67,    67,    67,   -29,    74,   -29,   -29,
-     -14,    12,    13,   -29,     8,   -29,   -29,    78,   -29,    10,
-     -29,   -29,    79,   -29,    72,   -29,   -13,   -29,   -29,   -29,
-     -29,   -29
+     -17,     7,    46,   -17,   -74,    64,    62,   -74,   -74,   -74,
+      -9,    82,   -74,    89,    85,   -74,     7,   115,    90,   101,
+     108,   -74,     7,   120,   113,    59,   131,   135,    32,   121,
+      79,   -74,   -74,   -74,   -74,   -74,   -74,   -74,   132,   -74,
+      32,   133,    32,    32,   -74,   -74,   -74,   114,   -74,   137,
+       2,   -74,   -74,   -74,   -74,   -74,   -74,   -10,    69,    -2,
+      37,    52,   119,    32,   -74,    32,    32,    32,    32,    32,
+      32,    32,    32,    32,    32,   120,   -74,   -74,    32,   130,
+     138,   -74,   -74,   -74,   143,   144,   140,   147,     3,   122,
+       2,    74,    74,   -74,   -74,   100,   100,   100,   100,   100,
+     100,    88,    84,   -74,   -74,    25,   124,   129,   -74,   120,
+     120,   -74,   142,   -74,   119,    32,   -74,   -74,   -74,   -74,
+     145,   -74,   141,   -74,    94,   103,   -74,   -74,     2,   -74,
+     -74,   -74,   -74
 };
 
 /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -615,103 +637,129 @@ static const yytype_int8 yypact[] =
    means the default is an error.  */
 static const yytype_int8 yydefact[] =
 {
-       0,    40,     0,     0,     2,     3,     5,     6,     7,    11,
-       0,     0,     0,     0,     1,     4,     0,    51,    52,    53,
-      49,     0,    50,    15,    48,    42,     0,    33,     0,     0,
-      14,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,    10,    41,     0,     0,     0,     0,    36,    35,
-      34,     0,     0,    30,    27,     0,    18,    19,    16,    17,
-      20,    21,    22,    23,    24,    25,    43,     0,    44,    46,
-       0,     0,     0,     8,     0,    12,    29,    28,    26,     0,
-       9,    39,     0,    38,     0,    37,     0,    31,    32,    45,
-      47,    13
+       0,    58,     0,     2,     3,     0,     0,     1,     4,    60,
+       0,     0,    59,     0,    22,    61,    58,     0,     0,     0,
+       0,    23,    58,     0,     0,    58,     0,     0,    31,     0,
+       0,     5,     7,     8,     9,    10,    11,    12,    16,    24,
+       0,     0,     0,     0,    70,    71,    72,    67,    69,     0,
+      32,    68,    33,    66,    21,    19,     6,     0,     0,    51,
+       0,     0,     0,    28,    20,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,    26,    15,     0,     0,
+       0,    54,    53,    52,     0,     0,    48,    45,     0,     0,
+      29,    36,    37,    34,    35,    38,    39,    40,    41,    42,
+      43,     0,     0,    62,    64,     0,     0,     0,    13,     0,
+       0,    47,    46,    44,     0,     0,    27,    17,    14,    57,
+       0,    56,     0,    55,     0,     0,    49,    50,    30,    63,
+      65,    25,    18
 };
 
 /* YYPGOTO[NTERM-NUM].  */
-static const yytype_int8 yypgoto[] =
+static const yytype_int16 yypgoto[] =
 {
-     -29,   -29,   -28,    -4,   -29,   -29,   -29,    80,   -11,   -29,
-      23,   -29,   -29,   -29,   -29,   -29,    57,   -29,   -29,   -29,
-     -29
+     -74,   -74,   -74,   -73,   -30,   -74,   -74,   -74,   -74,   168,
+     -74,   -74,   -74,   117,   -74,   -74,   -74,   -39,   -74,    58,
+     -74,   -74,   -74,   -74,    22,    96,   -74,   -74,   -74,   -74
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-       0,     3,     4,     5,     6,     7,     8,     9,    21,    22,
-      55,    47,    48,    49,    50,    12,    26,    71,    72,    23,
-      24
+       0,     2,     3,    30,    31,    32,    33,    34,    35,     4,
+      36,    37,    17,    38,    48,    89,    49,    50,    51,    88,
+      80,    81,    82,    83,     6,    10,   106,   107,    52,    53
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
    positive, shift that token.  If negative, reduce the rule whose
    number is the opposite.  If YYTABLE_NINF, syntax error.  */
-static const yytype_int8 yytable[] =
+static const yytype_uint8 yytable[] =
 {
-      15,    52,    28,    45,    29,    10,    44,    14,    75,    81,
-      91,    16,    11,     2,    46,     1,     2,     1,     2,    43,
-      44,    56,    57,    58,    59,    60,    61,    62,    63,    64,
-      65,    53,    82,    84,    67,    83,    85,    54,     1,     2,
-      32,    33,    34,    35,    78,    79,    86,    13,    15,    36,
-      37,    38,    39,    40,    41,    32,    33,    34,    35,    17,
-      18,    19,    20,    51,    36,    37,    38,    39,    40,    41,
-      32,    33,    34,    35,    34,    35,    42,    32,    33,    34,
-      35,    25,    15,    25,    68,    69,    36,    37,    38,    39,
-      40,    41,    27,    31,    73,    66,    30,    77,    80,    74,
-      76,    90,    88,    70,     0,    87,     0,    89
+      56,    58,   101,    60,    61,    65,    66,    67,    68,    78,
+      12,    13,    75,     1,    69,    70,    71,    72,    73,    74,
+      79,    26,   113,   114,    90,     5,    91,    92,    93,    94,
+      95,    96,    97,    98,    99,   100,   124,   125,    18,   102,
+      65,    66,    67,    68,    24,    13,     7,    41,   119,    69,
+      70,    71,    72,    73,    74,    65,    66,    67,    68,    44,
+      45,    46,    47,    84,    69,    70,    71,    72,    73,    74,
+      40,    56,    65,    66,    67,    68,   128,     5,    85,    67,
+      68,    69,    70,    71,    72,    73,    74,    65,    66,    67,
+      68,     9,    11,    77,    56,    56,    69,    70,    71,    72,
+      73,    74,    55,    65,    66,    67,    68,    14,   118,    25,
+      26,   117,    27,    28,    29,    16,    15,   131,    25,    26,
+      21,    27,    28,    29,    25,    26,   132,    27,    28,    29,
+      23,    22,    62,    25,    26,    19,    27,    28,    29,    63,
+      86,    20,   115,    39,   120,    54,    87,   121,   116,   122,
+      25,    26,   123,    27,    28,    29,    42,     9,   103,   104,
+      43,    64,   108,    59,    57,   109,   110,   111,   112,   126,
+     130,     8,   127,   129,    76,   105
 };
 
 static const yytype_int8 yycheck[] =
 {
-       4,    29,    13,    11,    22,    11,    20,     0,    23,    23,
-      23,    32,    18,    31,    22,    30,    31,    30,    31,    19,
-      20,    32,    33,    34,    35,    36,    37,    38,    39,    40,
-      41,    21,    20,    20,    45,    23,    23,    27,    30,    31,
-       3,     4,     5,     6,    19,    20,    74,    25,    52,    12,
+      30,    40,    75,    42,    43,     3,     4,     5,     6,    11,
+      19,    20,    22,    30,    12,    13,    14,    15,    16,    17,
+      22,    31,    19,    20,    63,    18,    65,    66,    67,    68,
+      69,    70,    71,    72,    73,    74,   109,   110,    16,    78,
+       3,     4,     5,     6,    22,    20,     0,    25,    23,    12,
       13,    14,    15,    16,    17,     3,     4,     5,     6,    27,
       28,    29,    30,    26,    12,    13,    14,    15,    16,    17,
-       3,     4,     5,     6,     5,     6,    24,     3,     4,     5,
-       6,    27,    86,    27,    28,    29,    12,    13,    14,    15,
-      16,    17,    30,    18,    24,    27,    16,    21,    24,    22,
-      27,    29,    79,    46,    -1,    27,    -1,    28
+      11,   101,     3,     4,     5,     6,   115,    18,    26,     5,
+       6,    12,    13,    14,    15,    16,    17,     3,     4,     5,
+       6,    27,    30,    24,   124,   125,    12,    13,    14,    15,
+      16,    17,    23,     3,     4,     5,     6,    25,    24,    30,
+      31,    23,    33,    34,    35,    30,    27,    23,    30,    31,
+      30,    33,    34,    35,    30,    31,    23,    33,    34,    35,
+      22,    30,    18,    30,    31,    20,    33,    34,    35,    25,
+      21,    26,    20,    30,    20,    24,    27,    23,    26,    20,
+      30,    31,    23,    33,    34,    35,    25,    27,    28,    29,
+      25,    24,    24,    30,    32,    22,    22,    27,    21,    27,
+      29,     3,   114,    28,    57,    79
 };
 
 /* YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
    state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,    30,    31,    35,    36,    37,    38,    39,    40,    41,
-      11,    18,    49,    25,     0,    37,    32,    27,    28,    29,
-      30,    42,    43,    53,    54,    27,    50,    30,    42,    22,
-      41,    18,     3,     4,     5,     6,    12,    13,    14,    15,
-      16,    17,    24,    19,    20,    11,    22,    45,    46,    47,
-      48,    26,    36,    21,    27,    44,    42,    42,    42,    42,
-      42,    42,    42,    42,    42,    42,    27,    42,    28,    29,
-      50,    51,    52,    24,    22,    23,    27,    21,    19,    20,
-      24,    23,    20,    23,    20,    23,    36,    27,    44,    28,
-      29,    23
+       0,    30,    37,    38,    45,    18,    60,     0,    45,    27,
+      61,    30,    19,    20,    25,    27,    30,    48,    60,    20,
+      26,    30,    30,    22,    60,    30,    31,    33,    34,    35,
+      39,    40,    41,    42,    43,    44,    46,    47,    49,    30,
+      11,    60,    25,    25,    27,    28,    29,    30,    50,    52,
+      53,    54,    64,    65,    24,    23,    40,    32,    53,    30,
+      53,    53,    18,    25,    24,     3,     4,     5,     6,    12,
+      13,    14,    15,    16,    17,    22,    49,    24,    11,    22,
+      56,    57,    58,    59,    26,    26,    21,    27,    55,    51,
+      53,    53,    53,    53,    53,    53,    53,    53,    53,    53,
+      53,    39,    53,    28,    29,    61,    62,    63,    24,    22,
+      22,    27,    21,    19,    20,    20,    26,    23,    24,    23,
+      20,    23,    20,    23,    39,    39,    27,    55,    53,    28,
+      29,    23,    23
 };
 
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr1[] =
 {
-       0,    34,    35,    36,    36,    37,    37,    37,    38,    38,
-      39,    40,    40,    41,    41,    42,    42,    42,    42,    42,
-      42,    42,    42,    42,    42,    42,    43,    44,    44,    44,
-      44,    44,    44,    45,    45,    45,    45,    46,    47,    48,
-      49,    49,    50,    50,    51,    51,    52,    52,    53,    53,
-      53,    54,    54,    54
+       0,    36,    37,    38,    38,    39,    39,    40,    40,    40,
+      40,    40,    40,    41,    41,    42,    43,    43,    44,    45,
+      46,    47,    48,    48,    48,    49,    49,    50,    51,    51,
+      51,    52,    52,    53,    53,    53,    53,    53,    53,    53,
+      53,    53,    53,    53,    54,    55,    55,    55,    55,    55,
+      55,    56,    56,    56,    56,    57,    58,    59,    60,    60,
+      61,    61,    62,    62,    63,    63,    64,    64,    64,    64,
+      65,    65,    65
 };
 
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr2[] =
 {
-       0,     2,     1,     1,     2,     1,     1,     1,     5,     6,
-       4,     1,     5,     7,     3,     1,     3,     3,     3,     3,
-       3,     3,     3,     3,     3,     3,     4,     1,     2,     2,
-       1,     3,     3,     0,     1,     1,     1,     3,     3,     3,
-       0,     3,     1,     3,     1,     3,     1,     3,     1,     1,
-       1,     1,     1,     1
+       0,     2,     1,     1,     2,     1,     2,     1,     1,     1,
+       1,     1,     1,     5,     6,     4,     1,     5,     7,     9,
+       3,     2,     0,     3,     5,     7,     3,     4,     0,     1,
+       3,     0,     1,     1,     3,     3,     3,     3,     3,     3,
+       3,     3,     3,     3,     4,     1,     2,     2,     1,     3,
+       3,     0,     1,     1,     1,     3,     3,     3,     0,     3,
+       1,     3,     1,     3,     1,     3,     1,     1,     1,     1,
+       1,     1,     1
 };
 
 
@@ -1174,387 +1222,820 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-  case 2: /* program: block  */
-#line 112 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
-                { programBlock.reset((yyvsp[0].block)); }
-#line 1181 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+  case 2: /* program: module  */
+#line 129 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+                 { program.reset((yyvsp[0].module));}
+#line 1229 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
     break;
 
-  case 3: /* block: stmt  */
-#line 115 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
-             { 
-                (yyval.block)=new common_impl::Block();
-                (yyval.block)->AppendNode((yyvsp[0].node));
+  case 3: /* module: func_decl  */
+#line 132 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+                {
+                    (yyval.module) = new common_impl::ModuleNode(
+                        "module",(yyvsp[0].func_decl)->GetLocation());
+                    (yyval.module)->Append((yyvsp[0].func_decl)); 
                 }
-#line 1190 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+#line 1239 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
     break;
 
-  case 4: /* block: block stmt  */
-#line 119 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
-                      { (yyvsp[-1].block)->AppendNode((yyvsp[0].node)); }
-#line 1196 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
-    break;
-
-  case 5: /* stmt: var_decl  */
-#line 122 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
-               {(yyval.node)=(yyvsp[0].var_decl_node);}
-#line 1202 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
-    break;
-
-  case 6: /* stmt: assign_stmt  */
-#line 123 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
-                 {(yyval.node)=(yyvsp[0].assign_stmt);}
-#line 1208 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
-    break;
-
-  case 7: /* stmt: if_else_stmt  */
-#line 124 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
-                   {(yyval.node)=(yyvsp[0].if_else_stmt);}
-#line 1214 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
-    break;
-
-  case 8: /* var_decl: T_IDENTIFIER shape_lt T_IDENTIFIER lt_init SY_SEMICOLON  */
-#line 128 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
-        {
-            (yyval.var_decl_node)=new common_impl::VarDeclarationNode(
-                (yyvsp[-4].token_info)->GetIdent(),
-                (yyvsp[-3].si64_list_node),
-                (yyvsp[-2].token_info)->GetIdent(),
-                (yyvsp[-1].node)
-            );
-        }
-#line 1227 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
-    break;
-
-  case 9: /* var_decl: T_IDENTIFIER shape_lt T_IDENTIFIER SY_EQUAL value_expr SY_SEMICOLON  */
-#line 137 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
-        {
-            (yyval.var_decl_node)=new common_impl::VarDeclarationNode(
-                (yyvsp[-5].token_info)->GetIdent(),
-                (yyvsp[-4].si64_list_node),
-                (yyvsp[-3].token_info)->GetIdent(),
-                (yyvsp[-1].value_expr)
-            );
-        }
-#line 1240 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
-    break;
-
-  case 10: /* assign_stmt: T_IDENTIFIER SY_EQUAL value_expr SY_SEMICOLON  */
-#line 147 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
-            {
-                (yyval.assign_stmt) = new common_impl::AssignStatement((yyvsp[-3].token_info)->GetIdent(),(yyvsp[-1].value_expr));
-            }
+  case 4: /* module: module func_decl  */
+#line 138 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+                {
+                    (yyval.module) = (yyvsp[-1].module);
+                    (yyval.module)->Append((yyvsp[0].func_decl));
+                }
 #line 1248 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
     break;
 
-  case 11: /* if_else_stmt: if_sub_stmt  */
-#line 152 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
-                          { (yyval.if_else_stmt)=(yyvsp[0].if_else_stmt);}
-#line 1254 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+  case 5: /* block: stmt  */
+#line 144 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+             { 
+                (yyval.block)=new common_impl::Block("block",(yyvsp[0].node)->GetLocation());
+                (yyval.block)->Append((yyvsp[0].node));
+                }
+#line 1257 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
     break;
 
-  case 12: /* if_else_stmt: if_sub_stmt KW_ELSE SY_LEFT_BRACE block SY_RIGHT_BRACE  */
-#line 154 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
-            {
-                (yyval.if_else_stmt) = (yyvsp[-4].if_else_stmt);
-                (yyvsp[-4].if_else_stmt)->AppendIfElse(nullptr,(yyvsp[-1].block));
-            }
+  case 6: /* block: block stmt  */
+#line 148 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+                      { (yyvsp[-1].block)->Append((yyvsp[0].node)); }
 #line 1263 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
     break;
 
-  case 13: /* if_sub_stmt: KW_IF SY_LEFT_PAREN value_expr SY_RIGHT_PAREN SY_LEFT_BRACE block SY_RIGHT_BRACE  */
-#line 161 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
-            {
-                (yyval.if_else_stmt) = new common_impl::IfElseStatement();
-                (yyval.if_else_stmt)->AppendIfElse((yyvsp[-4].value_expr),(yyvsp[-1].block));
-            }
-#line 1272 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+  case 7: /* stmt: var_decl  */
+#line 151 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+               {(yyval.node)=(yyvsp[0].var_decl_node);}
+#line 1269 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
     break;
 
-  case 14: /* if_sub_stmt: if_sub_stmt KW_ELSE if_sub_stmt  */
-#line 166 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
-            {
-                (yyval.if_else_stmt) = new common_impl::IfElseStatement();
-                (yyval.if_else_stmt) -> AppendIfElse((yyvsp[-2].if_else_stmt));
-                (yyval.if_else_stmt) -> AppendIfElse((yyvsp[0].if_else_stmt));
-            }
-#line 1282 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+  case 8: /* stmt: assign_stmt  */
+#line 152 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+                 {(yyval.node)=(yyvsp[0].assign_stmt);}
+#line 1275 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
     break;
 
-  case 15: /* value_expr: single_val  */
-#line 173 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
-                         { (yyval.value_expr)= new common_impl::ExpressionNode((yyvsp[0].node),-1,nullptr); }
-#line 1288 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+  case 9: /* stmt: if_else_stmt  */
+#line 153 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+                   {(yyval.node)=(yyvsp[0].if_else_stmt);}
+#line 1281 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
     break;
 
-  case 16: /* value_expr: value_expr SY_MUL value_expr  */
+  case 10: /* stmt: while_stmt  */
+#line 154 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+                 {(yyval.node)=(yyvsp[0].while_stmt);}
+#line 1287 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+    break;
+
+  case 11: /* stmt: return_stmt  */
+#line 155 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+                  {(yyval.node)=(yyvsp[0].return_stmt);}
+#line 1293 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+    break;
+
+  case 12: /* stmt: break_stmt  */
+#line 156 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+                 {(yyval.node)=(yyvsp[0].break_stmt);}
+#line 1299 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+    break;
+
+  case 13: /* var_decl: T_IDENTIFIER shape_lt_with_empty T_IDENTIFIER lt_init_with_empty SY_SEMICOLON  */
+#line 160 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+        {
+            common_impl::Location loc=(yyvsp[-4].token_info)->GetLocation();
+            loc.UpdateLocation((yyvsp[0].token_info)->GetLocation());
+            (yyval.var_decl_node)=new common_impl::VarDeclarationNode(
+                "var_decl",
+                loc,
+                (yyvsp[-4].token_info)->GetIdent(),
+                std::shared_ptr<common_impl::SI64ListNode>((yyvsp[-3].si64_list_node)),
+                (yyvsp[-2].token_info)->GetIdent(),
+                std::shared_ptr<common_impl::Node>((yyvsp[-1].node)),
+                nullptr
+            );
+        }
+#line 1317 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+    break;
+
+  case 14: /* var_decl: T_IDENTIFIER shape_lt_with_empty T_IDENTIFIER SY_EQUAL value_expr SY_SEMICOLON  */
 #line 174 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
-                                           { (yyval.value_expr)= new common_impl::ExpressionNode((yyvsp[-2].value_expr),(yyvsp[-1].token_info)->GetTokenId(),(yyvsp[0].value_expr));}
-#line 1294 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+        {
+            common_impl::Location loc=(yyvsp[-5].token_info)->GetLocation();
+            loc.UpdateLocation((yyvsp[0].token_info)->GetLocation());
+            (yyval.var_decl_node)=new common_impl::VarDeclarationNode(
+                "var_decl",
+                loc,
+                (yyvsp[-5].token_info)->GetIdent(),
+                std::shared_ptr<common_impl::SI64ListNode>((yyvsp[-4].si64_list_node)),
+                (yyvsp[-3].token_info)->GetIdent(),
+                nullptr,
+                std::shared_ptr<common_impl::ExpressionNode>((yyvsp[-1].value_expr))
+            );
+        }
+#line 1335 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
     break;
 
-  case 17: /* value_expr: value_expr SY_DIV value_expr  */
-#line 175 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
-                                            { (yyval.value_expr)= new common_impl::ExpressionNode((yyvsp[-2].value_expr),(yyvsp[-1].token_info)->GetTokenId(),(yyvsp[0].value_expr));}
-#line 1300 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
-    break;
-
-  case 18: /* value_expr: value_expr SY_PLUS value_expr  */
-#line 176 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
-                                            { (yyval.value_expr)= new common_impl::ExpressionNode((yyvsp[-2].value_expr),(yyvsp[-1].token_info)->GetTokenId(),(yyvsp[0].value_expr));}
-#line 1306 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
-    break;
-
-  case 19: /* value_expr: value_expr SY_MINUS value_expr  */
-#line 177 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
-                                              { (yyval.value_expr)= new common_impl::ExpressionNode((yyvsp[-2].value_expr),(yyvsp[-1].token_info)->GetTokenId(),(yyvsp[0].value_expr));}
-#line 1312 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
-    break;
-
-  case 20: /* value_expr: value_expr SY_CEQ value_expr  */
-#line 178 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
-                                            { (yyval.value_expr)= new common_impl::ExpressionNode((yyvsp[-2].value_expr),(yyvsp[-1].token_info)->GetTokenId(),(yyvsp[0].value_expr));}
-#line 1318 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
-    break;
-
-  case 21: /* value_expr: value_expr SY_CNE value_expr  */
-#line 179 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
-                                            { (yyval.value_expr)= new common_impl::ExpressionNode((yyvsp[-2].value_expr),(yyvsp[-1].token_info)->GetTokenId(),(yyvsp[0].value_expr));}
-#line 1324 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
-    break;
-
-  case 22: /* value_expr: value_expr SY_CGT value_expr  */
-#line 180 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
-                                           { (yyval.value_expr)= new common_impl::ExpressionNode((yyvsp[-2].value_expr),(yyvsp[-1].token_info)->GetTokenId(),(yyvsp[0].value_expr));}
-#line 1330 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
-    break;
-
-  case 23: /* value_expr: value_expr SY_CLT value_expr  */
-#line 181 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
-                                            { (yyval.value_expr)= new common_impl::ExpressionNode((yyvsp[-2].value_expr),(yyvsp[-1].token_info)->GetTokenId(),(yyvsp[0].value_expr));}
-#line 1336 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
-    break;
-
-  case 24: /* value_expr: value_expr SY_CGE value_expr  */
-#line 182 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
-                                            { (yyval.value_expr)= new common_impl::ExpressionNode((yyvsp[-2].value_expr),(yyvsp[-1].token_info)->GetTokenId(),(yyvsp[0].value_expr));}
-#line 1342 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
-    break;
-
-  case 25: /* value_expr: value_expr SY_CLE value_expr  */
-#line 183 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
-                                           { (yyval.value_expr)= new common_impl::ExpressionNode((yyvsp[-2].value_expr),(yyvsp[-1].token_info)->GetTokenId(),(yyvsp[0].value_expr));}
-#line 1348 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
-    break;
-
-  case 26: /* slice_expr: T_IDENTIFIER SY_LEFT_BRACKET slice_lt SY_RIGHT_BRACKET  */
-#line 187 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+  case 15: /* assign_stmt: T_IDENTIFIER SY_EQUAL value_expr SY_SEMICOLON  */
+#line 190 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
             {
-                (yyval.slice_expr) = new common_impl::SliceExpression((yyvsp[-3].token_info)->GetIdent(),(yyvsp[-1].slice_list_node));
+                common_impl::Location loc=(yyvsp[-3].token_info)->GetLocation();
+                loc.UpdateLocation((yyvsp[0].token_info)->GetLocation());
+                (yyval.assign_stmt) = new common_impl::AssignStatement(
+                    "assign_stmt",
+                    loc,
+                    (yyvsp[-3].token_info)->GetIdent(),
+                    std::shared_ptr<common_impl::ExpressionNode>((yyvsp[-1].value_expr))
+                );
             }
+#line 1350 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+    break;
+
+  case 16: /* if_else_stmt: if_sub_stmt  */
+#line 202 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+                          { (yyval.if_else_stmt)=(yyvsp[0].if_else_stmt);}
 #line 1356 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
     break;
 
-  case 27: /* slice_lt: V_SI64  */
-#line 193 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+  case 17: /* if_else_stmt: if_sub_stmt KW_ELSE SY_LEFT_BRACE block SY_RIGHT_BRACE  */
+#line 204 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
             {
-                (yyval.slice_list_node)=new common_impl::SliceList();
-                (yyval.slice_list_node)->AppendIndex((yyvsp[0].token_info)->GetValue<int64_t>());
+                common_impl::Location loc=(yyvsp[-4].if_else_stmt)->GetLocation();
+                loc.UpdateLocation((yyvsp[0].token_info)->GetLocation());
+                (yyval.if_else_stmt) = new common_impl::IfElseStatement(
+                    "ifelse_stmt",
+                    loc
+                );
+                (yyval.if_else_stmt)->Append((yyvsp[-4].if_else_stmt));
+                (yyval.if_else_stmt)->Append(nullptr,(yyvsp[-1].block));
             }
-#line 1365 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+#line 1371 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
     break;
 
-  case 28: /* slice_lt: V_SI64 SY_COLON  */
-#line 198 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+  case 18: /* while_stmt: KW_WHILE SY_LEFT_PAREN value_expr SY_RIGHT_PAREN SY_LEFT_BRACE block SY_RIGHT_BRACE  */
+#line 217 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
             {
-                (yyval.slice_list_node)=new common_impl::SliceList();
-                (yyval.slice_list_node)->AppendIndex((yyvsp[-1].token_info)->GetValue<int64_t>(),common_impl::SliceList::Position::TO_END);
+                common_impl::Location loc=(yyvsp[-6].token_info)->GetLocation();
+                loc.UpdateLocation((yyvsp[0].token_info)->GetLocation());
+                (yyval.while_stmt) = new common_impl::WhileStatement(
+                    "while_stmt",
+                    loc,
+                    std::shared_ptr<common_impl::ExpressionNode>((yyvsp[-4].value_expr)),
+                    std::shared_ptr<common_impl::Block>((yyvsp[-1].block))
+                );
             }
-#line 1374 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+#line 1386 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
     break;
 
-  case 29: /* slice_lt: SY_COLON V_SI64  */
-#line 203 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
-            {
-                (yyval.slice_list_node)=new common_impl::SliceList();
-                (yyval.slice_list_node)->AppendIndex(common_impl::SliceList::Position::TO_BEGIN,(yyvsp[-1].token_info)->GetValue<int64_t>());
-            }
-#line 1383 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
-    break;
-
-  case 30: /* slice_lt: SY_COLON  */
-#line 208 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
-            {
-                (yyval.slice_list_node)=new common_impl::SliceList();
-                (yyval.slice_list_node)->AppendIndex(common_impl::SliceList::Position::TO_BEGIN,
-                                    common_impl::SliceList::Position::TO_END);
-            }
-#line 1393 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
-    break;
-
-  case 31: /* slice_lt: V_SI64 SY_COLON V_SI64  */
-#line 214 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
-            {
-                (yyval.slice_list_node)=new common_impl::SliceList();
-                (yyval.slice_list_node)->AppendIndex((yyvsp[-2].token_info)->GetValue<int64_t>(),(yyvsp[0].token_info)->GetValue<int64_t>());
-            }
-#line 1402 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
-    break;
-
-  case 32: /* slice_lt: slice_lt SY_COMMA slice_lt  */
-#line 219 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
-            {
-                (yyval.slice_list_node) = new common_impl::SliceList();
-                (yyval.slice_list_node)->AppendIndex((yyvsp[-2].slice_list_node),(yyvsp[0].slice_list_node));
-                free((yyvsp[-2].slice_list_node));
-                free((yyvsp[0].slice_list_node));
-            }
-#line 1413 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
-    break;
-
-  case 33: /* lt_init: %empty  */
-#line 228 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
-                 {(yyval.node)=nullptr;}
-#line 1419 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
-    break;
-
-  case 34: /* lt_init: si64_lt_init  */
-#line 229 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
-                      {(yyval.node)=(yyvsp[0].si64_list_node);}
-#line 1425 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
-    break;
-
-  case 35: /* lt_init: fp64_lt_init  */
+  case 19: /* func_decl: T_IDENTIFIER shape_lt_with_empty T_IDENTIFIER SY_LEFT_PAREN formal_args_lt_with_empty SY_RIGHT_PAREN SY_LEFT_BRACE block SY_RIGHT_BRACE  */
 #line 230 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
-                      {(yyval.node)=(yyvsp[0].fp64_list_node);}
-#line 1431 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+            {
+                auto loc=(yyvsp[-8].token_info)->GetLocation();
+                loc.UpdateLocation((yyvsp[0].token_info)->GetLocation());
+                (yyval.func_decl) = new common_impl::FunctionDeclaration(
+                    "func_decl",
+                    loc,
+                    (yyvsp[-8].token_info)->GetIdent(),
+                    std::shared_ptr<common_impl::SI64ListNode>((yyvsp[-7].si64_list_node)),
+                    (yyvsp[-6].token_info)->GetIdent(),
+                    std::shared_ptr<common_impl::ArgumentList>((yyvsp[-4].arg_list)),
+                    std::shared_ptr<common_impl::Block>((yyvsp[-1].block))
+                );
+            }
+#line 1404 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
     break;
 
-  case 36: /* lt_init: str_lt_init  */
-#line 231 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
-                     {(yyval.node)=(yyvsp[0].str_list_node);}
-#line 1437 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+  case 20: /* return_stmt: KW_RETURN value_expr_with_empty SY_SEMICOLON  */
+#line 245 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+            {
+                common_impl::Location loc = (yyvsp[-2].token_info)->GetLocation();
+                loc.UpdateLocation((yyvsp[0].token_info)->GetLocation());
+                (yyval.return_stmt) = new common_impl::ReturnStatement(
+                    "return_stmt",
+                    loc,
+                    std::shared_ptr<common_impl::ExpressionNode>((yyvsp[-1].value_expr))
+                );
+            }
+#line 1418 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
     break;
 
-  case 37: /* str_lt_init: SY_LEFT_BRACE str_lt SY_RIGHT_BRACE  */
-#line 234 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
-                                                 {(yyval.str_list_node)=(yyvsp[-1].str_list_node);}
-#line 1443 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
-    break;
-
-  case 38: /* fp64_lt_init: SY_LEFT_BRACE fp64_lt SY_RIGHT_BRACE  */
-#line 237 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
-                                                    {(yyval.fp64_list_node)=(yyvsp[-1].fp64_list_node);}
-#line 1449 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
-    break;
-
-  case 39: /* si64_lt_init: SY_LEFT_BRACE si64_lt SY_RIGHT_BRACE  */
-#line 240 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
-                                                   {(yyval.si64_list_node)=(yyvsp[-1].si64_list_node);}
-#line 1455 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
-    break;
-
-  case 40: /* shape_lt: %empty  */
-#line 243 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
-                  {(yyval.si64_list_node)=nullptr;}
-#line 1461 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
-    break;
-
-  case 41: /* shape_lt: SY_LEFT_BRACKET si64_lt SY_RIGHT_BRACKET  */
-#line 244 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
-                                                   {(yyval.si64_list_node)=(yyvsp[-1].si64_list_node);}
-#line 1467 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
-    break;
-
-  case 42: /* si64_lt: V_SI64  */
-#line 247 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
-                 {
-                    (yyval.si64_list_node)=new common_impl::SI64ListNode();
-                    (yyval.si64_list_node)->Append((yyvsp[0].token_info)->GetValue<int64_t>());
-                }
-#line 1476 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
-    break;
-
-  case 43: /* si64_lt: si64_lt SY_COMMA V_SI64  */
-#line 252 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
-                {
-                    (yyvsp[-2].si64_list_node)->Append((yyvsp[0].token_info)->GetValue<int64_t>());
-                }
-#line 1484 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
-    break;
-
-  case 44: /* fp64_lt: V_FP64  */
+  case 21: /* break_stmt: KW_BREAK SY_SEMICOLON  */
 #line 257 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
-                {
-                    (yyval.fp64_list_node)=new common_impl::FP64ListNode();
-                    (yyval.fp64_list_node)->Append((yyvsp[0].token_info)->GetValue<double>());
-                }
-#line 1493 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+            {
+                auto loc=(yyvsp[-1].token_info)->GetLocation();
+                loc.UpdateLocation((yyvsp[0].token_info)->GetLocation());
+                (yyval.break_stmt)=new common_impl::BreakStatement("break_stmt",loc);
+            }
+#line 1428 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
     break;
 
-  case 45: /* fp64_lt: fp64_lt SY_COMMA V_FP64  */
-#line 262 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
-                {
-                    (yyvsp[-2].fp64_list_node)->Append((yyvsp[0].token_info)->GetValue<double>());
-                }
-#line 1501 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+  case 22: /* formal_args_lt_with_empty: %empty  */
+#line 264 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+                                    {(yyval.arg_list)=nullptr;}
+#line 1434 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
     break;
 
-  case 46: /* str_lt: V_STR  */
-#line 267 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+  case 23: /* formal_args_lt_with_empty: T_IDENTIFIER shape_lt_with_empty T_IDENTIFIER  */
+#line 266 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+            { 
+                auto loc=(yyvsp[-2].token_info)->GetLocation();
+                loc.UpdateLocation((yyvsp[0].token_info)->GetLocation());
+                (yyval.arg_list)= new common_impl::ArgumentList(
+                    "arg",
+                    loc
+                );
+                (yyval.arg_list)->Append(
+                    (yyvsp[-2].token_info)->GetIdent(),
+                    std::shared_ptr<common_impl::SI64ListNode>((yyvsp[-1].si64_list_node)),
+                    (yyvsp[0].token_info)->GetIdent(),
+                    loc
+                );
+            }
+#line 1453 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+    break;
+
+  case 24: /* formal_args_lt_with_empty: formal_args_lt_with_empty SY_COMMA T_IDENTIFIER shape_lt_with_empty T_IDENTIFIER  */
+#line 281 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+            {
+                common_impl::Location loc = (yyvsp[-4].arg_list)->GetLocation();
+                loc.UpdateLocation((yyvsp[0].token_info)->GetLocation());
+                (yyval.arg_list) = (yyvsp[-4].arg_list);
+                (yyval.arg_list)->Append(
+                    (yyvsp[-2].token_info)->GetIdent(),
+                    std::shared_ptr<common_impl::SI64ListNode>((yyvsp[-1].si64_list_node)),
+                    (yyvsp[0].token_info)->GetIdent(),
+                    loc    
+                );
+            }
+#line 1469 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+    break;
+
+  case 25: /* if_sub_stmt: KW_IF SY_LEFT_PAREN value_expr SY_RIGHT_PAREN SY_LEFT_BRACE block SY_RIGHT_BRACE  */
+#line 295 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+            {
+                auto loc = (yyvsp[-6].token_info)->GetLocation();
+                loc.UpdateLocation((yyvsp[0].token_info)->GetLocation());
+                (yyval.if_else_stmt) = new common_impl::IfElseStatement(
+                    "ifelse+_stmt",
+                    loc
+                );
+                (yyval.if_else_stmt)->Append((yyvsp[-4].value_expr),(yyvsp[-1].block));
+            }
+#line 1483 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+    break;
+
+  case 26: /* if_sub_stmt: if_sub_stmt KW_ELSE if_sub_stmt  */
+#line 305 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+            {
+                (yyval.if_else_stmt) = (yyvsp[-2].if_else_stmt);
+                (yyval.if_else_stmt) -> Append((yyvsp[0].if_else_stmt));
+            }
+#line 1492 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+    break;
+
+  case 27: /* func_call: T_IDENTIFIER SY_LEFT_PAREN actual_args_lt_with_empty SY_RIGHT_PAREN  */
+#line 312 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+            {
+                common_impl::Location loc=(yyvsp[-3].token_info)->GetLocation();
+                loc.UpdateLocation((yyvsp[0].token_info)->GetLocation());
+                (yyval.func_call)=new common_impl::FunctionCall(
+                    "func_call",
+                    loc,
+                    (yyvsp[-3].token_info)->GetIdent(),
+                    std::shared_ptr<common_impl::ExpressionList>((yyvsp[-1].expr_list))
+                );
+            }
+#line 1507 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+    break;
+
+  case 28: /* actual_args_lt_with_empty: %empty  */
+#line 324 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+                                   {(yyval.expr_list)=nullptr;}
+#line 1513 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+    break;
+
+  case 29: /* actual_args_lt_with_empty: value_expr  */
+#line 326 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+            {
+                (yyval.expr_list)=new common_impl::ExpressionList(
+                    "expr_lt",
+                    (yyvsp[0].value_expr)->GetLocation()
+                );
+                (yyval.expr_list)->Append((yyvsp[0].value_expr));
+            }
+#line 1525 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+    break;
+
+  case 30: /* actual_args_lt_with_empty: actual_args_lt_with_empty SY_COMMA value_expr  */
+#line 334 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+            {
+                (yyval.expr_list)=new common_impl::ExpressionList(
+                    "expr_lt",
+                    (yyvsp[-2].expr_list)->GetLocation()
+                );
+                (yyval.expr_list)->Append((yyvsp[-2].expr_list));
+                (yyval.expr_list)->Append((yyvsp[0].value_expr));
+            }
+#line 1538 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+    break;
+
+  case 31: /* value_expr_with_empty: %empty  */
+#line 344 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+                               {(yyval.value_expr)=nullptr;}
+#line 1544 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+    break;
+
+  case 32: /* value_expr_with_empty: value_expr  */
+#line 345 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+                                    {(yyval.value_expr)=(yyvsp[0].value_expr);}
+#line 1550 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+    break;
+
+  case 33: /* value_expr: single_val  */
+#line 349 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+                {
+                    common_impl::Location loc = (yyvsp[0].node)->GetLocation();
+                    (yyval.value_expr)= new common_impl::ExpressionNode(
+                        std::string("expr"),
+                        loc,
+                        std::shared_ptr<common_impl::Node>((yyvsp[0].node)),
+                        -1,
+                        nullptr
+                    ); 
+                }
+#line 1565 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+    break;
+
+  case 34: /* value_expr: value_expr SY_MUL value_expr  */
+#line 360 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+                {
+                    common_impl::Location loc=(yyvsp[-2].value_expr)->GetLocation();
+                    loc.UpdateLocation((yyvsp[0].value_expr)->GetLocation());
+                    (yyval.value_expr)= new common_impl::ExpressionNode(
+                        std::string("expr"),
+                        loc,
+                        std::shared_ptr<common_impl::Node>((yyvsp[-2].value_expr)),
+                        (yyvsp[-1].token_info)->GetTokenId(),
+                        std::shared_ptr<common_impl::Node>((yyvsp[0].value_expr))
+                    );
+                }
+#line 1581 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+    break;
+
+  case 35: /* value_expr: value_expr SY_DIV value_expr  */
+#line 372 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+                { 
+                    common_impl::Location loc=(yyvsp[-2].value_expr)->GetLocation();
+                    loc.UpdateLocation((yyvsp[0].value_expr)->GetLocation());
+                    (yyval.value_expr)= new common_impl::ExpressionNode(
+                        std::string("expr"),
+                        loc,
+                        std::shared_ptr<common_impl::Node>((yyvsp[-2].value_expr)),
+                        (yyvsp[-1].token_info)->GetTokenId(),
+                        std::shared_ptr<common_impl::Node>((yyvsp[0].value_expr))
+                    );
+                }
+#line 1597 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+    break;
+
+  case 36: /* value_expr: value_expr SY_PLUS value_expr  */
+#line 384 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+                {
+                    common_impl::Location loc=(yyvsp[-2].value_expr)->GetLocation();
+                    loc.UpdateLocation((yyvsp[0].value_expr)->GetLocation());
+                    (yyval.value_expr)= new common_impl::ExpressionNode(
+                        std::string("expr"),
+                        loc,
+                        std::shared_ptr<common_impl::Node>((yyvsp[-2].value_expr)),
+                        (yyvsp[-1].token_info)->GetTokenId(),
+                        std::shared_ptr<common_impl::Node>((yyvsp[0].value_expr))
+                    );
+                }
+#line 1613 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+    break;
+
+  case 37: /* value_expr: value_expr SY_MINUS value_expr  */
+#line 396 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+                { 
+                    common_impl::Location loc=(yyvsp[-2].value_expr)->GetLocation();
+                    loc.UpdateLocation((yyvsp[0].value_expr)->GetLocation());
+                    (yyval.value_expr)= new common_impl::ExpressionNode(
+                        std::string("expr"),
+                        loc,
+                        std::shared_ptr<common_impl::Node>((yyvsp[-2].value_expr)),
+                        (yyvsp[-1].token_info)->GetTokenId(),
+                        std::shared_ptr<common_impl::Node>((yyvsp[0].value_expr))
+                    );
+                }
+#line 1629 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+    break;
+
+  case 38: /* value_expr: value_expr SY_CEQ value_expr  */
+#line 408 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+                {
+                    common_impl::Location loc=(yyvsp[-2].value_expr)->GetLocation();
+                    loc.UpdateLocation((yyvsp[0].value_expr)->GetLocation());
+                    (yyval.value_expr)= new common_impl::ExpressionNode(
+                        std::string("expr"),
+                        loc,
+                        std::shared_ptr<common_impl::Node>((yyvsp[-2].value_expr)),
+                        (yyvsp[-1].token_info)->GetTokenId(),
+                        std::shared_ptr<common_impl::Node>((yyvsp[0].value_expr))
+                    );
+                }
+#line 1645 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+    break;
+
+  case 39: /* value_expr: value_expr SY_CNE value_expr  */
+#line 420 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+                {
+                    common_impl::Location loc=(yyvsp[-2].value_expr)->GetLocation();
+                    loc.UpdateLocation((yyvsp[0].value_expr)->GetLocation());
+                    (yyval.value_expr)= new common_impl::ExpressionNode(
+                        std::string("expr"),
+                        loc,
+                        std::shared_ptr<common_impl::Node>((yyvsp[-2].value_expr)),
+                        (yyvsp[-1].token_info)->GetTokenId(),
+                        std::shared_ptr<common_impl::Node>((yyvsp[0].value_expr))
+                    );
+                }
+#line 1661 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+    break;
+
+  case 40: /* value_expr: value_expr SY_CGT value_expr  */
+#line 432 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+                {
+                    common_impl::Location loc=(yyvsp[-2].value_expr)->GetLocation();
+                    loc.UpdateLocation((yyvsp[0].value_expr)->GetLocation());
+                    (yyval.value_expr)= new common_impl::ExpressionNode(
+                        std::string("expr"),
+                        loc,
+                        std::shared_ptr<common_impl::Node>((yyvsp[-2].value_expr)),
+                        (yyvsp[-1].token_info)->GetTokenId(),
+                        std::shared_ptr<common_impl::Node>((yyvsp[0].value_expr))
+                    );
+                }
+#line 1677 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+    break;
+
+  case 41: /* value_expr: value_expr SY_CLT value_expr  */
+#line 444 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+                {
+                    common_impl::Location loc=(yyvsp[-2].value_expr)->GetLocation();
+                    loc.UpdateLocation((yyvsp[0].value_expr)->GetLocation());
+                    (yyval.value_expr)= new common_impl::ExpressionNode(
+                        std::string("expr"),
+                        loc,
+                        std::shared_ptr<common_impl::Node>((yyvsp[-2].value_expr)),
+                        (yyvsp[-1].token_info)->GetTokenId(),
+                        std::shared_ptr<common_impl::Node>((yyvsp[0].value_expr))
+                    );
+                }
+#line 1693 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+    break;
+
+  case 42: /* value_expr: value_expr SY_CGE value_expr  */
+#line 456 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+                {
+                    common_impl::Location loc=(yyvsp[-2].value_expr)->GetLocation();
+                    loc.UpdateLocation((yyvsp[0].value_expr)->GetLocation());
+                    (yyval.value_expr)= new common_impl::ExpressionNode(
+                        std::string("expr"),
+                        loc,
+                        std::shared_ptr<common_impl::Node>((yyvsp[-2].value_expr)),
+                        (yyvsp[-1].token_info)->GetTokenId(),
+                        std::shared_ptr<common_impl::Node>((yyvsp[0].value_expr))
+                    );
+                }
+#line 1709 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+    break;
+
+  case 43: /* value_expr: value_expr SY_CLE value_expr  */
+#line 468 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+                { 
+                    common_impl::Location loc=(yyvsp[-2].value_expr)->GetLocation();
+                    loc.UpdateLocation((yyvsp[0].value_expr)->GetLocation());
+                    (yyval.value_expr)= new common_impl::ExpressionNode(
+                        "expr",
+                        loc,
+                        std::shared_ptr<common_impl::Node>((yyvsp[-2].value_expr)),
+                        (yyvsp[-1].token_info)->GetTokenId(),
+                        std::shared_ptr<common_impl::Node>((yyvsp[0].value_expr))
+                    );
+                }
+#line 1725 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+    break;
+
+  case 44: /* slice_expr: T_IDENTIFIER SY_LEFT_BRACKET slice_lt SY_RIGHT_BRACKET  */
+#line 482 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+            {
+                common_impl::Location loc = (yyvsp[-3].token_info)->GetLocation();
+                loc.UpdateLocation((yyvsp[0].token_info)->GetLocation());
+
+                (yyval.slice_expr) = new common_impl::SliceExpression(
+                    std::string("slice_expr"),
+                    loc,
+                    (yyvsp[-3].token_info)->GetIdent(),
+                    std::shared_ptr<common_impl::SliceList>((yyvsp[-1].slice_list_node))
+                );
+            }
+#line 1741 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+    break;
+
+  case 45: /* slice_lt: V_SI64  */
+#line 496 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+            {
+                (yyval.slice_list_node) = new common_impl::SliceList(
+                    std::string("slice_lt"),
+                    (yyvsp[0].token_info)->GetLocation()
+                );
+                (yyval.slice_list_node)->Append((yyvsp[0].token_info)->GetValue<int64_t>(),(yyvsp[0].token_info)->GetLocation());
+            }
+#line 1753 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+    break;
+
+  case 46: /* slice_lt: V_SI64 SY_COLON  */
+#line 504 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+            {
+                (yyval.slice_list_node)=new common_impl::SliceList(
+                    std::string("slice_lt"),
+                    (yyvsp[0].token_info)->GetLocation()
+                );
+                (yyval.slice_list_node)->Append(
+                        (yyvsp[-1].token_info)->GetValue<int64_t>(),common_impl::SliceList::Position::TO_END,
+                        (yyvsp[-1].token_info)->GetLocation()
+                    );
+            }
+#line 1768 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+    break;
+
+  case 47: /* slice_lt: SY_COLON V_SI64  */
+#line 515 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+            {
+                (yyval.slice_list_node)=new common_impl::SliceList(
+                    std::string("slice_lt"),
+                    (yyvsp[-1].token_info)->GetLocation()
+                );
+                (yyval.slice_list_node)->Append(
+                    common_impl::SliceList::Position::TO_BEGIN,(yyvsp[0].token_info)->GetValue<int64_t>(),
+                    (yyvsp[0].token_info)->GetLocation()
+                );
+            }
+#line 1783 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+    break;
+
+  case 48: /* slice_lt: SY_COLON  */
+#line 526 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+            {
+                (yyval.slice_list_node)=new common_impl::SliceList(
+                    std::string("slice_lt"),
+                    (yyvsp[0].token_info)->GetLocation()
+                );
+                (yyval.slice_list_node)->Append(
+                    common_impl::SliceList::Position::TO_BEGIN,
+                    common_impl::SliceList::Position::TO_END,
+                    (yyvsp[0].token_info)->GetLocation()
+                );
+            }
+#line 1799 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+    break;
+
+  case 49: /* slice_lt: V_SI64 SY_COLON V_SI64  */
+#line 538 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+            {
+                (yyval.slice_list_node)=new common_impl::SliceList(
+                    std::string("slice_lt"),
+                    (yyvsp[-2].token_info)->GetLocation()
+                );
+                (yyval.slice_list_node)->Append(
+                    (yyvsp[-2].token_info)->GetValue<int64_t>(),
+                    (yyvsp[0].token_info)->GetValue<int64_t>(),
+                    (yyvsp[0].token_info)->GetLocation()
+                );
+            }
+#line 1815 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+    break;
+
+  case 50: /* slice_lt: slice_lt SY_COMMA slice_lt  */
+#line 550 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+            {
+                (yyval.slice_list_node) = new common_impl::SliceList(
+                    std::string("slice_lt"),
+                    (yyvsp[-2].slice_list_node)->GetLocation()
+                );
+                (yyval.slice_list_node)->Append((yyvsp[-2].slice_list_node),(yyvsp[0].slice_list_node));
+            }
+#line 1827 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+    break;
+
+  case 51: /* lt_init_with_empty: %empty  */
+#line 560 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+                            {(yyval.node)=nullptr;}
+#line 1833 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+    break;
+
+  case 52: /* lt_init_with_empty: si64_lt_init  */
+#line 561 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+                      {(yyval.node)=(yyvsp[0].si64_list_node);}
+#line 1839 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+    break;
+
+  case 53: /* lt_init_with_empty: fp64_lt_init  */
+#line 562 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+                      {(yyval.node)=(yyvsp[0].fp64_list_node);}
+#line 1845 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+    break;
+
+  case 54: /* lt_init_with_empty: str_lt_init  */
+#line 563 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+                     {(yyval.node)=(yyvsp[0].str_list_node);}
+#line 1851 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+    break;
+
+  case 55: /* str_lt_init: SY_LEFT_BRACE str_lt SY_RIGHT_BRACE  */
+#line 568 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+                {
+                    (yyval.str_list_node) = (yyvsp[-1].str_list_node);
+                    (yyval.str_list_node)->GetLocation().UpdateLocation((yyvsp[-2].token_info)->GetLocation());
+                    (yyval.str_list_node)->GetLocation().UpdateLocation((yyvsp[0].token_info)->GetLocation());
+                }
+#line 1861 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+    break;
+
+  case 56: /* fp64_lt_init: SY_LEFT_BRACE fp64_lt SY_RIGHT_BRACE  */
+#line 576 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+                {
+                    (yyval.fp64_list_node) = (yyvsp[-1].fp64_list_node);
+                    (yyval.fp64_list_node)->GetLocation().UpdateLocation((yyvsp[-2].token_info)->GetLocation());
+                    (yyval.fp64_list_node)->GetLocation().UpdateLocation((yyvsp[0].token_info)->GetLocation());
+                }
+#line 1871 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+    break;
+
+  case 57: /* si64_lt_init: SY_LEFT_BRACE si64_lt SY_RIGHT_BRACE  */
+#line 584 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+                {
+                    (yyval.si64_list_node) = (yyvsp[-1].si64_list_node);
+                    (yyval.si64_list_node)->GetLocation().UpdateLocation((yyvsp[-2].token_info)->GetLocation());
+                    (yyval.si64_list_node)->GetLocation().UpdateLocation((yyvsp[0].token_info)->GetLocation());
+                }
+#line 1881 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+    break;
+
+  case 58: /* shape_lt_with_empty: %empty  */
+#line 591 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+                             {(yyval.si64_list_node)=nullptr;}
+#line 1887 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+    break;
+
+  case 59: /* shape_lt_with_empty: SY_LEFT_BRACKET si64_lt SY_RIGHT_BRACKET  */
+#line 593 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+                {
+                    (yyval.si64_list_node) = (yyvsp[-1].si64_list_node);
+                    (yyval.si64_list_node)->GetLocation().UpdateLocation((yyvsp[-2].token_info)->GetLocation());
+                    (yyval.si64_list_node)->GetLocation().UpdateLocation((yyvsp[0].token_info)->GetLocation());
+                }
+#line 1897 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+    break;
+
+  case 60: /* si64_lt: V_SI64  */
+#line 600 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+                 {
+                    (yyval.si64_list_node)=new common_impl::SI64ListNode(
+                        "si64_lt",
+                        (yyvsp[0].token_info)->GetLocation()
+                    );
+                    (yyval.si64_list_node)->Append((yyvsp[0].token_info)->GetValue<int64_t>(),(yyvsp[0].token_info)->GetLocation());
+                }
+#line 1909 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+    break;
+
+  case 61: /* si64_lt: si64_lt SY_COMMA V_SI64  */
+#line 608 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+                {
+                    (yyval.si64_list_node) = (yyvsp[-2].si64_list_node);
+                    (yyvsp[-2].si64_list_node)->Append(
+                        (yyvsp[0].token_info)->GetValue<int64_t>(),
+                        (yyvsp[0].token_info)->GetLocation()
+                    );
+                }
+#line 1921 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+    break;
+
+  case 62: /* fp64_lt: V_FP64  */
+#line 617 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+                {
+                    (yyval.fp64_list_node)=new common_impl::FP64ListNode(
+                        "fp64_list",
+                        (yyvsp[0].token_info)->GetLocation()
+                    );
+                    (yyval.fp64_list_node)->Append((yyvsp[0].token_info)->GetValue<double>(),(yyvsp[0].token_info)->GetLocation());
+                }
+#line 1933 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+    break;
+
+  case 63: /* fp64_lt: fp64_lt SY_COMMA V_FP64  */
+#line 625 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+                {
+                    (yyval.fp64_list_node) = (yyvsp[-2].fp64_list_node);
+                    (yyvsp[-2].fp64_list_node)->Append(
+                            (yyvsp[0].token_info)->GetValue<double>(),
+                            (yyvsp[0].token_info)->GetLocation()
+                        );
+                }
+#line 1945 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+    break;
+
+  case 64: /* str_lt: V_STR  */
+#line 634 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
               {
-                    (yyval.str_list_node)=new common_impl::STRListNode();
-                    (yyval.str_list_node)->Append((yyvsp[0].token_info)->GetValue<std::string>());
+                    (yyval.str_list_node)=new common_impl::STRListNode(
+                        "str_list",
+                        (yyvsp[0].token_info)->GetLocation()
+                    );
+                    (yyval.str_list_node)->Append((yyvsp[0].token_info)->GetValue<std::string>(),(yyvsp[0].token_info)->GetLocation());
                 }
-#line 1510 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+#line 1957 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
     break;
 
-  case 47: /* str_lt: str_lt SY_COMMA V_STR  */
-#line 272 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+  case 65: /* str_lt: str_lt SY_COMMA V_STR  */
+#line 642 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
                 {
-                    (yyvsp[-2].str_list_node)->Append((yyvsp[0].token_info)->GetValue<std::string>());
+                    (yyval.str_list_node) = (yyvsp[-2].str_list_node);
+                    (yyvsp[-2].str_list_node)->Append(
+                            (yyvsp[0].token_info)->GetValue<std::string>(),
+                            (yyvsp[-2].str_list_node)->GetLocation()
+                        );
                 }
-#line 1518 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+#line 1969 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
     break;
 
-  case 48: /* single_val: literal_val  */
-#line 278 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+  case 66: /* single_val: literal_val  */
+#line 652 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
                         { (yyval.node)=(yyvsp[0].node);}
-#line 1524 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+#line 1975 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
     break;
 
-  case 49: /* single_val: T_IDENTIFIER  */
-#line 279 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
-                           {(yyval.node) =new common_impl::IdentifierNode((yyvsp[0].token_info)->GetIdent()); }
-#line 1530 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+  case 67: /* single_val: T_IDENTIFIER  */
+#line 654 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+                {
+                    (yyval.node) =new common_impl::IdentifierNode(
+                            "identifier",
+                            (yyvsp[0].token_info)->GetLocation(),
+                            (yyvsp[0].token_info)->GetIdent()
+                        ); 
+                }
+#line 1987 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
     break;
 
-  case 50: /* single_val: slice_expr  */
-#line 280 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+  case 68: /* single_val: slice_expr  */
+#line 661 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
                          {(yyval.node)=(yyvsp[0].slice_expr);}
-#line 1536 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+#line 1993 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
     break;
 
-  case 51: /* literal_val: V_SI64  */
-#line 283 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
-                        {(yyval.node) = new common_impl::SI64Node((yyvsp[0].token_info)->GetValue<int64_t>());}
-#line 1542 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+  case 69: /* single_val: func_call  */
+#line 662 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+                        {(yyval.node)=(yyvsp[0].func_call);}
+#line 1999 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
     break;
 
-  case 52: /* literal_val: V_FP64  */
-#line 284 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
-                        {(yyval.node) = new common_impl::FP64Node((yyvsp[0].token_info)->GetValue<double>());}
-#line 1548 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+  case 70: /* literal_val: V_SI64  */
+#line 667 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+                {
+                    (yyval.node) = new common_impl::SI64Node(
+                        std::string("si64"),
+                        (yyvsp[0].token_info)->GetLocation(),
+                        (yyvsp[0].token_info)->GetValue<int64_t>()
+                    );
+                }
+#line 2011 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
     break;
 
-  case 53: /* literal_val: V_STR  */
-#line 285 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
-                        {(yyval.node) = new common_impl::StrNode((yyvsp[0].token_info)->GetValue<std::string>());}
-#line 1554 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+  case 71: /* literal_val: V_FP64  */
+#line 675 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+                {
+                    (yyval.node) = new common_impl::FP64Node(
+                        std::string("fp64"),
+                        (yyvsp[0].token_info)->GetLocation(),
+                        (yyvsp[0].token_info)->GetValue<double>()
+                    );
+                }
+#line 2023 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+    break;
+
+  case 72: /* literal_val: V_STR  */
+#line 683 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+                {
+                    (yyval.node) = new common_impl::StrNode(
+                        std::string("str"),
+                        (yyvsp[0].token_info)->GetLocation(),
+                        (yyvsp[0].token_info)->GetValue<std::string>()
+                    );
+                }
+#line 2035 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
     break;
 
 
-#line 1558 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
+#line 2039 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.cpp"
 
       default: break;
     }
@@ -1747,5 +2228,5 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 287 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
+#line 691 "/home/muzhailong/Projects/workspace/tl/src/syntax/parser.y"
 

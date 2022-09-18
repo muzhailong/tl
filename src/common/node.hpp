@@ -1,7 +1,14 @@
 #ifndef COMMON_NODE_HPP
 #define COMMON_NODE_HPP
 
-#include <llvm/IR/Value.h>
+#include <llvm/ADT/ScopedHashTable.h>
+#include <mlir/IR/Attributes.h>
+#include <mlir/IR/Builders.h>
+#include <mlir/IR/BuiltinOps.h>
+#include <mlir/IR/MLIRContext.h>
+#include <mlir/IR/Types.h>
+#include <mlir/IR/Value.h>
+#include <mlir/IR/Verifier.h>
 
 #include <cassert>
 #include <cstddef>
@@ -14,48 +21,62 @@
 
 #include "common/dot.hpp"
 #include "common/id.hpp"
+#include "common/location.hpp"
 #include "common/status.hpp"
 #include "common/token.hpp"
 #include "common/utils.hpp"
+#include "dialect/dialect.hpp"
 
 namespace tl {
 namespace common {
 
 using OP_KIND = int64_t;
 
-class CodeGenContext;
-
 class Node : public Id {
 public:
-    Node(const std::string& name) : name_(name) {}
+    Node(const std::string& name, const Location& loc)
+        : name_(name), loc_(loc) {}
 
     virtual ~Node() = default;
 
-    virtual std::shared_ptr<llvm::Value> CodeGen(CodeGenContext& context) = 0;
+    virtual std::pair<mlir::LogicalResult, mlir::Value> CodeGen(
+        mlir::OpBuilder& builder,
+        llvm::ScopedHashTable<mlir::StringRef, mlir::Value>&) = 0;
 
     virtual void Print(DotHelper&) const = 0;
 
     std::string GetName() const { return name_; }
+    Location& GetLocation() { return loc_; }
+    Location GetLocation() const { return loc_; }
 
 private:
     const std::string name_;
+    Location loc_;
 };
 
 template <typename Tp>
 class LiteralNode : public Node {
 public:
-    LiteralNode(const std::string& name, Tp value)
-        : Node(name), value_(value) {}
-    LiteralNode(Tp value) : LiteralNode("literal_node", value) {}
+    LiteralNode(const std::string& name, const Location& loc, Tp value)
+        : Node(name, loc), value_(value) {}
 
-    std::shared_ptr<llvm::Value> CodeGen(CodeGenContext&) override {
-        return nullptr;
+    virtual std::pair<mlir::LogicalResult, mlir::Value> CodeGen(
+        mlir::OpBuilder& builder,
+        llvm::ScopedHashTable<mlir::StringRef, mlir::Value>&) override {
+        if constexpr (std::is_same_v<Tp, int64_t>) {
+            auto op = builder.create<tl::dialect::ConstantOp>(
+                GetLocation().ToMLIRLocation(builder.getContext()), value_);
+            return {mlir::LogicalResult::success(), op};
+        }
+
+        return {mlir::LogicalResult::success(), nullptr};
     }
 
     void Print(DotHelper& helper) const override {
         std::stringstream label;
         label << "name:" << GetName() << ", value=";
         label << value_;
+        label << "\n" << GetLocation().ToString();
         helper.WriteNode(GetId(), label.str());
     }
 
@@ -67,62 +88,37 @@ using SI64Node = LiteralNode<int64_t>;
 using FP64Node = LiteralNode<double>;
 using StrNode = LiteralNode<std::string>;
 
-class IdentifierNode : public Node {
+class FunctionDeclaration;
+
+class ModuleNode : public Node {
 public:
-    IdentifierNode(const std::string& name, const std::string& ident)
-        : Node(name), ident_(ident) {}
-    IdentifierNode(const std::string& ident)
-        : IdentifierNode("ident_node", ident) {}
+    ModuleNode(const std::string& name, const Location& loc)
+        : Node(name, loc) {}
 
-    std::shared_ptr<llvm::Value> CodeGen(CodeGenContext&) override {
-        return nullptr;
-    }
+    Status Append(FunctionDeclaration* func);
+    virtual std::pair<mlir::LogicalResult, mlir::Value> CodeGen(
+        mlir::OpBuilder& builder,
+        llvm::ScopedHashTable<mlir::StringRef, mlir::Value>&) override;
+    virtual void Print(DotHelper& helper) const override;
 
-    void Print(DotHelper& helper) const override {
-        std::string label = "";
-        label += "name:";
-        label += GetName();
-        label += ", ident=";
-        label += ident_;
-        helper.WriteNode(GetId(), label);
-    }
+    std::optional<mlir::ModuleOp> GetModule() { return the_module_; }
 
 private:
-    const std::string ident_;
+    std::vector<std::shared_ptr<FunctionDeclaration>> funcs_;
+    std::optional<mlir::ModuleOp> the_module_;
 };
 
 class ExpressionNode : public Node {
 public:
-    ExpressionNode(const std::string& name, std::shared_ptr<Node> lhs,
-                   OP_KIND op, std::shared_ptr<Node> rhs)
-        : Node(name), lhs_(lhs), rhs_(rhs), op_(op) {}
-    ExpressionNode(std::shared_ptr<Node> lhs, OP_KIND op,
+    ExpressionNode(const std::string& name, const Location& loc,
+                   std::shared_ptr<Node> lhs, OP_KIND op,
                    std::shared_ptr<Node> rhs)
-        : ExpressionNode("expression_node", lhs, op, rhs) {}
-    ExpressionNode(Node* lhs, OP_KIND op, Node* rhs)
-        : ExpressionNode(std::shared_ptr<Node>(lhs), op,
-                         std::shared_ptr<Node>(rhs)) {}
+        : Node(name, loc), lhs_(lhs), rhs_(rhs), op_(op) {}
 
-    std::shared_ptr<llvm::Value> CodeGen(CodeGenContext&) override {
-        return nullptr;
-    }
-
-    void Print(DotHelper& helper) const override {
-        std::stringstream ss;
-        ss << "name: " << GetName();
-        if (op_ > 0 && lhs_ && rhs_) {
-            ss << ", op: " << TokenId2Str(op_);
-        }
-        helper.WriteNode(GetId(), ss.str());
-        if (lhs_) {
-            lhs_->Print(helper);
-            helper.WriteEdge(GetId(), lhs_->GetId(), "lhs");
-        }
-        if (rhs_) {
-            rhs_->Print(helper);
-            helper.WriteEdge(GetId(), rhs_->GetId(), "rhs");
-        }
-    }
+    virtual std::pair<mlir::LogicalResult, mlir::Value> CodeGen(
+        mlir::OpBuilder& builder,
+        llvm::ScopedHashTable<mlir::StringRef, mlir::Value>&) override;
+    virtual void Print(DotHelper& helper) const override;
 
 private:
     std::shared_ptr<Node> lhs_;
@@ -133,31 +129,16 @@ private:
 class Block : public Node {
 public:
     using SizeType = size_t;
-    Block(const std::string& name) : Node(name) {}
-    Block() : Block("block") {}
+    Block(const std::string& name, const Location& loc) : Node(name, loc) {}
 
-    Status AppendNode(std::shared_ptr<Node> node) {
-        nodes_.emplace_back(node);
-        return Status::TL_OK;
-    }
-
-    Status AppendNode(Node* node) {
-        return AppendNode(std::shared_ptr<Node>(node));
-    }
-
+    Status Append(std::shared_ptr<Node> node);
+    Status Append(Node* node);
     SizeType size() const { return nodes_.size(); }
 
-    std::shared_ptr<llvm::Value> CodeGen(CodeGenContext&) override {
-        return nullptr;
-    }
-
-    void Print(DotHelper& helper) const override {
-        helper.WriteNode(GetId(), GetName());
-        for (auto& node : nodes_) {
-            node->Print(helper);
-            helper.WriteEdge(GetId(), node->GetId(), "sub_node");
-        }
-    }
+    std::pair<mlir::LogicalResult, mlir::Value> CodeGen(
+        mlir::OpBuilder& builder,
+        llvm::ScopedHashTable<mlir::StringRef, mlir::Value>&) override;
+    void Print(DotHelper& helper) const override;
 
 private:
     std::vector<std::shared_ptr<Node>> nodes_;
@@ -167,12 +148,19 @@ template <typename Tp>
 class ListNode : public Node {
 public:
     using ElementType = Tp;
-    ListNode(const std::string& name) : Node(name) {}
-    ListNode() : ListNode("list_node") {}
+    ListNode(const std::string& name, const Location& loc) : Node(name, loc) {}
 
-    std::shared_ptr<llvm::Value> CodeGen(CodeGenContext&) override {
-        return nullptr;
+    std::pair<mlir::LogicalResult, mlir::Value> CodeGen(
+        mlir::OpBuilder& builder,
+        llvm::ScopedHashTable<mlir::StringRef, mlir::Value>&) override {
+        return {mlir::LogicalResult::success(), nullptr};
     }
+
+    mlir::ArrayRef<int64_t> ToSI64List() { return value_; }
+
+    mlir::ArrayRef<double> ToFP64List() { return value_; }
+
+    mlir::ArrayRef<std::string> ToStrList() { return value_; }
 
     void Print(DotHelper& helper) const override {
         std::stringstream ss;
@@ -180,14 +168,15 @@ public:
         if (!value_.empty()) {
             ss << ", list: " << ToStr();
         }
+        ss << "\n" << GetLocation().ToString();
         helper.WriteNode(GetId(), ss.str());
     }
 
-    Status Append(Tp d) {
+    Status Append(Tp d, Location loc) {
         value_.push_back(d);
+        GetLocation().UpdateLocation(loc);
         return Status::TL_OK;
     }
-
     std::string ToStr() const { return Vec2Str<Tp>(value_); }
 
 private:
@@ -202,54 +191,40 @@ using STRListNode = ListNode<std::string>;
     ui8 [12,22] abc{};
 */
 
+class IdentifierNode : public Node {
+public:
+    IdentifierNode(const std::string& name, const Location& loc,
+                   const std::string& ident)
+        : Node(name, loc), ident_(ident) {}
+    std::pair<mlir::LogicalResult, mlir::Value> CodeGen(
+        mlir::OpBuilder& builder,
+        llvm::ScopedHashTable<mlir::StringRef, mlir::Value>&) override;
+    void Print(DotHelper& helper) const override;
+    std::string GetIdent() const { return ident_; }
+
+private:
+    const std::string ident_;
+};
+
 class VarDeclarationNode : public Node {
 public:
-    VarDeclarationNode(const std::string& name, const std::string& var_dt,
+    VarDeclarationNode(const std::string& name, const Location& loc,
+                       const std::string& var_dt,
                        std::shared_ptr<SI64ListNode> var_shape,
                        const std::string& var_ident,
                        std::shared_ptr<Node> var_inti_lt,
                        std::shared_ptr<ExpressionNode> expr_node)
-        : Node(name),
+        : Node(name, loc),
           var_dt_(var_dt),
           var_shape_(var_shape),
           var_ident_(var_ident),
           var_inti_lt_(var_inti_lt),
           expr_node_(expr_node) {}
 
-    VarDeclarationNode(const std::string& var_dt, SI64ListNode* var_shape,
-                       const std::string& var_ident, Node* var_inti_lt)
-        : VarDeclarationNode(
-              "var_decl_node", var_dt, std::shared_ptr<SI64ListNode>(var_shape),
-              var_ident, std::shared_ptr<Node>(var_inti_lt), nullptr) {}
-
-    VarDeclarationNode(const std::string& var_dt, SI64ListNode* var_shape,
-                       const std::string& var_ident, ExpressionNode* expr_node)
-        : VarDeclarationNode(
-              "var_decl_node", var_dt, std::shared_ptr<SI64ListNode>(var_shape),
-              var_ident, nullptr, std::shared_ptr<ExpressionNode>(expr_node)) {}
-
-    std::shared_ptr<llvm::Value> CodeGen(CodeGenContext&) override {
-        return nullptr;
-    }
-
-    void Print(DotHelper& helper) const override {
-        std::stringstream label;
-        label << "dt: " << var_dt_ << ", ";
-        label << "ident: " << var_ident_;
-        helper.WriteNode(GetId(), label.str());
-        if (var_shape_) {
-            var_shape_->Print(helper);
-            helper.WriteEdge(GetId(), var_shape_->GetId(), "var_shape");
-        }
-        if (var_inti_lt_) {
-            var_inti_lt_->Print(helper);
-            helper.WriteEdge(GetId(), var_inti_lt_->GetId(), "init_lt");
-        }
-        if (expr_node_) {
-            expr_node_->Print(helper);
-            helper.WriteEdge(GetId(), expr_node_->GetId(), "assign_stmt");
-        }
-    }
+    std::pair<mlir::LogicalResult, mlir::Value> CodeGen(
+        mlir::OpBuilder& builder,
+        llvm::ScopedHashTable<mlir::StringRef, mlir::Value>&) override;
+    void Print(DotHelper& helper) const override;
 
 private:
     const std::string var_dt_;
@@ -261,28 +236,15 @@ private:
 
 class AssignStatement : public Node {
 public:
-    AssignStatement(const std::string& name, const std::string& ident,
+    AssignStatement(const std::string& name, const Location& loc,
+                    const std::string& ident,
                     std::shared_ptr<ExpressionNode> value)
-        : Node(name), ident_(ident), value_(value) {}
+        : Node(name, loc), ident_(ident), value_(value) {}
 
-    AssignStatement(const std::string& ident,
-                    std::shared_ptr<ExpressionNode> value)
-        : AssignStatement("assign_statement", ident, value) {}
-
-    AssignStatement(const std::string& ident, ExpressionNode* value)
-        : AssignStatement(ident, std::shared_ptr<ExpressionNode>(value)) {}
-
-    std::shared_ptr<llvm::Value> CodeGen(CodeGenContext&) override {
-        return nullptr;
-    }
-
-    void Print(DotHelper& helper) const override {
-        std::string label = "ident: ";
-        label += ident_;
-        helper.WriteNode(GetId(), label);
-        value_->Print(helper);
-        helper.WriteEdge(GetId(), value_->GetId(), "value");
-    }
+    std::pair<mlir::LogicalResult, mlir::Value> CodeGen(
+        mlir::OpBuilder& builder,
+        llvm::ScopedHashTable<mlir::StringRef, mlir::Value>&) override;
+    void Print(DotHelper& helper) const override;
 
 private:
     const std::string ident_;
@@ -293,74 +255,19 @@ class SliceList : public Node {
 public:
     enum class Position { TO_END, TO_BEGIN };
 
-    SliceList() : Node("slice_list") {}
+    SliceList(const std::string& name, const Location& loc) : Node(name, loc) {}
 
-    Status AppendIndex(int64_t lo, int64_t hi) {
-        assert(lo < hi && "lo must be less hi");
-        idxs_.emplace_back(std::make_optional(lo), std::make_optional(hi));
-        return Status::TL_OK;
-    }
+    Status Append(int64_t lo, int64_t hi, Location);
+    Status Append(int64_t idx, Position pos, Location);
+    Status Append(Position pos, int64_t idx, Location);
+    Status Append(Position pos1, Position pos2, Location);
+    Status Append(int64_t idx, Location);
+    Status Append(SliceList* left, SliceList* right);
 
-    Status AppendIndex(int64_t idx, Position pos) {
-        assert(pos == Position::TO_END && "pos must be TO_END");
-        idxs_.emplace_back(std::make_optional(idx), std::nullopt);
-        return Status::TL_OK;
-    }
-
-    Status AppendIndex(Position pos, int64_t idx) {
-        assert(pos == Position::TO_BEGIN && "pos must be TO_BEGIN");
-        idxs_.emplace_back(std::nullopt, std::make_optional(idx));
-        return Status::TL_OK;
-    }
-
-    Status AppendIndex(Position pos1, Position pos2) {
-        assert(pos1 == Position::TO_BEGIN && pos2 == Position::TO_END &&
-               "pos1 must be TO_BEGIN and pos2 must be TO_END");
-        idxs_.emplace_back(std::nullopt, std::nullopt);
-        return Status::TL_OK;
-    }
-
-    Status AppendIndex(int64_t idx) { return AppendIndex(idx, idx + 1); }
-
-    Status AppendIndex(SliceList* left, SliceList* right) {
-        if (left) {
-            idxs_.insert(idxs_.end(), left->idxs_.begin(), left->idxs_.end());
-        }
-
-        if (right) {
-            idxs_.insert(idxs_.end(), right->idxs_.begin(), right->idxs_.end());
-        }
-
-        return Status::TL_OK;
-    }
-
-    std::shared_ptr<llvm::Value> CodeGen(CodeGenContext&) override {
-        return nullptr;
-    }
-
-    void Print(DotHelper& helper) const override {
-        std::stringstream label;
-        label << "name: " << GetName() << " ,idxs: [";
-        for (size_t i = 0; i < idxs_.size(); ++i) {
-            auto& e = idxs_[i];
-            if (i != 0) {
-                label << ", ";
-            }
-            if (e.first.has_value()) {
-                label << e.first.value();
-            } else {
-                label << " ";
-            }
-            label << ":";
-            if (e.second.has_value()) {
-                label << e.second.value();
-            } else {
-                label << " ";
-            }
-        }
-        label << "]";
-        helper.WriteNode(GetId(), label.str());
-    }
+    std::pair<mlir::LogicalResult, mlir::Value> CodeGen(
+        mlir::OpBuilder& builder,
+        llvm::ScopedHashTable<mlir::StringRef, mlir::Value>&) override;
+    void Print(DotHelper& helper) const override;
 
 private:
     std::vector<std::pair<std::optional<int64_t>, std::optional<int64_t>>>
@@ -369,29 +276,15 @@ private:
 
 class SliceExpression : public Node {
 public:
-    SliceExpression(const std::string& name, const std::string& ident,
+    SliceExpression(const std::string& name, const Location& loc,
+                    const std::string& ident,
                     std::shared_ptr<SliceList> slice_lt)
-        : Node(name), ident_(ident), slice_lt_(slice_lt) {}
+        : Node(name, loc), ident_(ident), slice_lt_(slice_lt) {}
 
-    SliceExpression(const std::string& ident,
-                    std::shared_ptr<SliceList> slice_lt)
-        : SliceExpression("slice_expr", ident, slice_lt) {}
-
-    SliceExpression(const std::string& ident, SliceList* slice_lt)
-        : SliceExpression(ident, std::shared_ptr<SliceList>(slice_lt)) {}
-
-    std::shared_ptr<llvm::Value> CodeGen(CodeGenContext&) override {
-        return nullptr;
-    }
-
-    void Print(DotHelper& helper) const override {
-        std::stringstream label;
-        label << "name: " << GetName() << ", ";
-        label << "ident: " << ident_;
-        helper.WriteNode(GetId(), label.str());
-        slice_lt_->Print(helper);
-        helper.WriteEdge(GetId(), slice_lt_->GetId(), "slice_lt");
-    }
+    std::pair<mlir::LogicalResult, mlir::Value> CodeGen(
+        mlir::OpBuilder& builder,
+        llvm::ScopedHashTable<mlir::StringRef, mlir::Value>&) override;
+    void Print(DotHelper& helper) const override;
 
 private:
     const std::string ident_;
@@ -400,61 +293,161 @@ private:
 
 class IfElseStatement : public Node {
 public:
-    IfElseStatement(const std::string& name) : Node(name) {}
-    IfElseStatement() : IfElseStatement("if_else_stmt") {}
+    IfElseStatement(const std::string& name, const Location& loc)
+        : Node(name, loc) {}
 
-    std::shared_ptr<llvm::Value> CodeGen(CodeGenContext&) override {
-        return nullptr;
-    }
+    std::pair<mlir::LogicalResult, mlir::Value> CodeGen(
+        mlir::OpBuilder& builder,
+        llvm::ScopedHashTable<mlir::StringRef, mlir::Value>&) override;
 
-    void Print(DotHelper& helper) const override {
-        helper.WriteNode(GetId(), GetName());
-        for (size_t i = 0; i < if_else_stmts_.size(); ++i) {
-            auto& item = if_else_stmts_[i];
-            if (item.first) {
-                item.first->Print(helper);
-                std::string label = "if_stmt_";
-                label += std::to_string(i);
-                helper.WriteEdge(GetId(), item.first->GetId(), label);
-            }
+    void Print(DotHelper& helper) const override;
 
-            if (item.second) {
-                item.second->Print(helper);
-                std::string label = "if_block_";
-                label += std::to_string(i);
-                helper.WriteEdge(GetId(), item.second->GetId(), label);
-            }
-        }
-    }
-
-    Status AppendIfElse(std::shared_ptr<ExpressionNode> en,
-                        std::shared_ptr<Block> block) {
-        if_else_stmts_.emplace_back(en, block);
-        return Status::TL_OK;
-    }
-
-    Status AppendIfElse(ExpressionNode* en, Block* block) {
-        return AppendIfElse(std::shared_ptr<ExpressionNode>(en),
-                            std::shared_ptr<Block>(block));
-    }
-
-    Status AppendIfElse(const std::shared_ptr<IfElseStatement>& other) {
-        if (other) {
-            if_else_stmts_.insert(if_else_stmts_.end(),
-                                  other->if_else_stmts_.begin(),
-                                  other->if_else_stmts_.end());
-        }
-        return Status::TL_OK;
-    }
-
-    Status AppendIfElse(IfElseStatement* other) {
-        return AppendIfElse(std::shared_ptr<IfElseStatement>(other));
-    }
+    Status Append(std::shared_ptr<ExpressionNode> en,
+                  std::shared_ptr<Block> block);
+    Status Append(ExpressionNode* en, Block* block);
+    Status Append(const std::shared_ptr<IfElseStatement>& other);
+    Status Append(IfElseStatement* other);
 
 private:
     std::vector<
         std::pair<std::shared_ptr<ExpressionNode>, std::shared_ptr<Block>>>
         if_else_stmts_;
+};
+
+class WhileStatement : public Node {
+public:
+    WhileStatement(const std::string& name, const Location& loc,
+                   std::shared_ptr<ExpressionNode> expr,
+                   std::shared_ptr<Block> block)
+        : Node(name, loc), expr_(expr), block_(block) {}
+
+    std::pair<mlir::LogicalResult, mlir::Value> CodeGen(
+        mlir::OpBuilder& builder,
+        llvm::ScopedHashTable<mlir::StringRef, mlir::Value>&) override;
+    void Print(DotHelper& helper) const override;
+
+private:
+    std::shared_ptr<ExpressionNode> expr_;
+    std::shared_ptr<Block> block_;
+};
+
+class ReturnStatement : public Node {
+public:
+    ReturnStatement(const std::string& name, const Location& loc,
+                    std::shared_ptr<ExpressionNode> expr)
+        : Node(name, loc), expr_(expr) {}
+
+    std::pair<mlir::LogicalResult, mlir::Value> CodeGen(
+        mlir::OpBuilder& builder,
+        llvm::ScopedHashTable<mlir::StringRef, mlir::Value>&) override;
+    void Print(DotHelper& helper) const override;
+
+private:
+    std::shared_ptr<ExpressionNode> expr_;
+};
+
+class ArgumentList : public Node {
+public:
+    ArgumentList(const std::string& name, const Location& loc)
+        : Node(name, loc) {}
+    std::pair<mlir::LogicalResult, mlir::Value> CodeGen(
+        mlir::OpBuilder& builder,
+        llvm::ScopedHashTable<mlir::StringRef, mlir::Value>&) override;
+    std::pair<mlir::ArrayRef<mlir::StringRef>,
+              mlir::ArrayRef<mlir::RankedTensorType>>
+    ToArguments(mlir::OpBuilder& builder) const;
+
+    Status Append(const std::string& dt, std::shared_ptr<SI64ListNode> shape,
+                  const std::string& ident, Location loc);
+    Status Append(std::shared_ptr<ArgumentList> other);
+
+    void Print(DotHelper& helper) const override;
+
+private:
+    std::vector<
+        std::tuple<std::string, std::shared_ptr<SI64ListNode>, std::string>>
+        args_;
+};
+
+// si64[32,22] func(){}
+class FunctionDeclaration : public Node {
+public:
+    FunctionDeclaration(const std::string& name, const Location& loc,
+                        const std::string& dt,
+                        std::shared_ptr<SI64ListNode> shape,
+                        const std::string& func_ident,
+                        std::shared_ptr<ArgumentList> args,
+                        std::shared_ptr<Block> block)
+        : Node(name, loc),
+          dt_(dt),
+          shape_(shape),
+          func_ident_(func_ident),
+          args_(args),
+          block_(block) {}
+
+    std::pair<mlir::LogicalResult, mlir::Value> CodeGen(
+        mlir::OpBuilder& builder,
+        llvm::ScopedHashTable<mlir::StringRef, mlir::Value>&) override;
+    void Print(DotHelper& helper) const override;
+
+private:
+    const std::string dt_;
+    std::shared_ptr<SI64ListNode> shape_;
+    const std::string func_ident_;
+    std::shared_ptr<ArgumentList> args_;
+    std::shared_ptr<Block> block_;
+};
+
+class ExpressionList : public Node {
+public:
+    ExpressionList(const std::string& name, const Location& loc)
+        : Node(name, loc) {}
+
+    std::pair<mlir::LogicalResult, mlir::Value> CodeGen(
+        mlir::OpBuilder& builder,
+        llvm::ScopedHashTable<mlir::StringRef, mlir::Value>&) override;
+    void Print(DotHelper& helper) const override;
+
+    Status Append(std::shared_ptr<ExpressionNode> expr);
+    Status Append(ExpressionNode* expr);
+    Status Append(std::shared_ptr<ExpressionList> other);
+    Status Append(ExpressionList* other);
+
+private:
+    friend class FunctionCall;
+
+    std::vector<std::shared_ptr<ExpressionNode>> expr_lt_;
+};
+
+class FunctionCall : public Node {
+public:
+    FunctionCall(const std::string& name, const Location& loc,
+                 const std::string& func_ident,
+                 std::shared_ptr<ExpressionList> args)
+        : Node(name, loc), func_ident_(func_ident), args_(args) {}
+
+    std::pair<mlir::LogicalResult, mlir::Value> CodeGen(
+        mlir::OpBuilder& builder,
+        llvm::ScopedHashTable<mlir::StringRef, mlir::Value>&) override;
+    void Print(DotHelper& helper) const override;
+
+private:
+    const std::string func_ident_;
+    std::shared_ptr<ExpressionList> args_;
+};
+
+class BreakStatement : public Node {
+public:
+    BreakStatement(const std::string& name, const Location& loc)
+        : Node(name, loc) {}
+
+    std::pair<mlir::LogicalResult, mlir::Value> CodeGen(
+        mlir::OpBuilder& builder,
+        llvm::ScopedHashTable<mlir::StringRef, mlir::Value>&) override;
+
+    void Print(DotHelper& helper) const override {
+        helper.WriteNode(GetId(), GetName());
+    }
 };
 
 }  // namespace common
