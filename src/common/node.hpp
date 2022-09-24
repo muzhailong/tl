@@ -353,8 +353,7 @@ public:
     std::pair<mlir::LogicalResult, mlir::Value> CodeGen(
         mlir::OpBuilder& builder,
         llvm::ScopedHashTable<mlir::StringRef, mlir::Value>&) override;
-    std::pair<mlir::ArrayRef<mlir::StringRef>,
-              mlir::ArrayRef<mlir::RankedTensorType>>
+    std::pair<mlir::SmallVector<mlir::StringRef>, mlir::SmallVector<mlir::Type>>
     ToArguments(mlir::OpBuilder& builder) const;
 
     Status Append(const std::string& dt, std::shared_ptr<SI64ListNode> shape,

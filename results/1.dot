@@ -1,0 +1,48 @@
+digraph grammer{
+	node_10014[ label="module
+/home/muzhailong/Projects/workspace/tl/examples/test1.tl:1:4"]
+	node_10013[ label="data_type: si64, func_ident: self_add
+/home/muzhailong/Projects/workspace/tl/examples/test1.tl:1:4"]
+	node_10000[ label="name: si64_lt, list: [32, 20]
+/home/muzhailong/Projects/workspace/tl/examples/test1.tl:1:5"]
+	node_10013->node_10000[label="shape"]
+	node_10001[ label="arg
+/home/muzhailong/Projects/workspace/tl/examples/test1.tl:1:16"]
+	node_10002[ label="name: si64_lt, list: [22, 32]
+/home/muzhailong/Projects/workspace/tl/examples/test1.tl:1:23"]
+	node_10001->node_10002[label="arg_2,dt:si64,ident:c"]
+	node_10013->node_10001[label="args"]
+	node_10012[ label="block
+/home/muzhailong/Projects/workspace/tl/examples/test1.tl:2:6"]
+	node_10011[ label="return_stmt
+/home/muzhailong/Projects/workspace/tl/examples/test1.tl:2:6"]
+	node_10010[ label="name: expr
+/home/muzhailong/Projects/workspace/tl/examples/test1.tl:2:6
+op: +"]
+	node_10004[ label="name: expr
+/home/muzhailong/Projects/workspace/tl/examples/test1.tl:2:6"]
+	node_10003[ label="name:identifier, ident=a
+/home/muzhailong/Projects/workspace/tl/examples/test1.tl:2:6"]
+	node_10004->node_10003[label="lhs"]
+	node_10010->node_10004[label="lhs"]
+	node_10009[ label="name: expr
+/home/muzhailong/Projects/workspace/tl/examples/test1.tl:2:6
+op: *"]
+	node_10006[ label="name: expr
+/home/muzhailong/Projects/workspace/tl/examples/test1.tl:2:6"]
+	node_10005[ label="name:identifier, ident=b
+/home/muzhailong/Projects/workspace/tl/examples/test1.tl:2:6"]
+	node_10006->node_10005[label="lhs"]
+	node_10009->node_10006[label="lhs"]
+	node_10008[ label="name: expr
+/home/muzhailong/Projects/workspace/tl/examples/test1.tl:2:6"]
+	node_10007[ label="name:identifier, ident=c
+/home/muzhailong/Projects/workspace/tl/examples/test1.tl:2:6"]
+	node_10008->node_10007[label="lhs"]
+	node_10009->node_10008[label="rhs"]
+	node_10010->node_10009[label="rhs"]
+	node_10011->node_10010[label="expr"]
+	node_10012->node_10011[label="sub_node"]
+	node_10013->node_10012[label="func body"]
+	node_10014->node_10013[label="func"]
+}

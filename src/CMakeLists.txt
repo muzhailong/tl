@@ -1,5 +1,3 @@
-set(MAIN_OBJ main_obj)
-
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/lex)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/syntax)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/common)
@@ -31,3 +29,6 @@ target_link_libraries(${EXE_NAME}
     MLIRSideEffectInterfaces
     MLIRDialectUtils
 )
+
+target_compile_options(${EXE_NAME}
+    PRIVATE -Wno-covered-switch-default)

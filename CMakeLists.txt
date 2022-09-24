@@ -10,6 +10,8 @@ set(LIB_NAME TL)
 
 add_compile_options(-Wall -Wno-implicit-fallthrough -Wno-unneeded-internal-declaration -Wno-unused-function -fno-rtti)
 
+include(${PROJECT_SOURCE_DIR}/cmake/clipp.cmake)
+
 option(LLVM_DIR "llvm cmake dir" CACHE)
 find_package(LLVM REQUIRED CONFIG)
 

@@ -1,3 +1,4 @@
+#include <llvm/ADT/STLExtras.h>
 #include <llvm/ADT/ScopedHashTable.h>
 #include <mlir/IR/Attributes.h>
 #include <mlir/IR/Builders.h>
@@ -67,7 +68,7 @@ static mlir::RankedTensorType BuildType(mlir::OpBuilder& builder,
 #undef ITEM
     // TODO(XXX): add the type user defined and str
     return mapper.count(name.str()) ? mapper[name.str()](builder, shape)
-                                    : nullptr;
+                                    : throw name.str() + " is not supported!";
 }
 
 std::pair<mlir::LogicalResult, mlir::Value> ModuleNode::CodeGen(
@@ -482,18 +483,18 @@ std::pair<mlir::LogicalResult, mlir::Value> ArgumentList::CodeGen(
     llvm::ScopedHashTable<mlir::StringRef, mlir::Value>& symbol_table) {
     return {mlir::LogicalResult::success(), nullptr};
 }
-std::pair<mlir::ArrayRef<mlir::StringRef>,
-          mlir::ArrayRef<mlir::RankedTensorType>>
+std::pair<mlir::SmallVector<mlir::StringRef>, mlir::SmallVector<mlir::Type>>
 ArgumentList::ToArguments(mlir::OpBuilder& builder) const {
     // std::tuple<std::string, std::shared_ptr<SI64ListNode>, std::string>>
-    mlir::SmallVector<mlir::StringRef, 6> name_vec;
-    mlir::SmallVector<mlir::RankedTensorType> type_vec;
+    mlir::SmallVector<mlir::StringRef> name_vec;
+    mlir::SmallVector<mlir::Type> type_vec;
     for (auto& arg : args_) {
         auto& shape = std::get<1>(arg);
-        type_vec.emplace_back(
-            BuildType(builder, std::get<0>(arg),
-                      shape ? shape->ToSI64List() : mlir::ArrayRef<int64_t>()));
-        name_vec.emplace_back(std::get<2>(arg));
+        type_vec.emplace_back(BuildType(
+            builder, std::get<0>(arg),
+            shape ? shape->ToSI64List() : mlir::ArrayRef<int64_t>(1)));
+        const std::string& ident = std::get<2>(arg);
+        name_vec.emplace_back(ident);
     }
     return {name_vec, type_vec};
 }
@@ -537,15 +538,18 @@ std::pair<mlir::LogicalResult, mlir::Value> FunctionDeclaration::CodeGen(
     llvm::ScopedHashTable<mlir::StringRef, mlir::Value>& symbol_table) {
     mlir::RankedTensorType type =
         BuildType(builder, dt_,
-                  (shape_ ? shape_->ToSI64List() : mlir::ArrayRef<int64_t>()));
-    auto [name_arr, type_arr] =
-        args_ ? args_->ToArguments(builder)
-              : std::make_pair(mlir::ArrayRef<mlir::StringRef>(),
-                               mlir::ArrayRef<mlir::RankedTensorType>());
+                  (shape_ ? shape_->ToSI64List() : mlir::ArrayRef<int64_t>(1)));
+    mlir::SmallVector<mlir::StringRef> name_arr;
+    mlir::SmallVector<mlir::Type> type_arr;
+    if (args_) {
+        auto par = args_->ToArguments(builder);
+        name_arr = par.first;
+        type_arr = par.second;
+    }
+
     llvm::ScopedHashTableScope<mlir::StringRef, mlir::Value> scope(
         symbol_table);
-    mlir::ArrayRef<mlir::Type> input_arr(type_arr.begin(), type_arr.end());
-    auto func_type = builder.getFunctionType(input_arr, {type});
+    auto func_type = builder.getFunctionType(type_arr, {type});
     auto func = builder.create<tl::dialect::FuncOp>(
         GetLocation().ToMLIRLocation(builder.getContext()), func_ident_,
         func_type);

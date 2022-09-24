@@ -41,6 +41,7 @@ def ConstantOp : TL_Op<"constant",[NoSideEffect]>{
     let hasVerifier = 1;
 }
 
+
 def AddOp : TL_Op<"add">{
     let summary = "add";
 

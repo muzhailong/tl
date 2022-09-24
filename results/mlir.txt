@@ -1,0 +1,8 @@
+"builtin.module"() ({
+  "tl.func"() ({
+  ^bb0(%arg0: tensor<1xsi8>, %arg1: tensor<1xsi8>, %arg2: tensor<22x32xsi8>):
+    %0 = "tl.mul"(%arg1, %arg2) : (tensor<1xsi8>, tensor<22x32xsi8>) -> tensor<*xf64>
+    %1 = "tl.add"(%arg0, %0) : (tensor<1xsi8>, tensor<*xf64>) -> tensor<*xf64>
+    "tl.return"(%1) : (tensor<*xf64>) -> ()
+  }) {function_type = (tensor<1xsi8>, tensor<1xsi8>, tensor<22x32xsi8>) -> tensor<32x20xsi8>, sym_name = "self_add"} : () -> ()
+}) : () -> ()
